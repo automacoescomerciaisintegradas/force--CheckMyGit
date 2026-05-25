@@ -80,7 +80,8 @@ function runSetupCommands() {
     const commands = [
     "bun add react-markdown@^9.0.3",
     "bun add react-syntax-highlighter@^15.6.1",
-    "bun add framer-motion"
+    "bun add framer-motion",
+    "bun add react-syntax-highlighter"
 ];
     
     if (commands.length === 0) {
