@@ -15,13 +15,13 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: 'u2',
-    username: 'madeinlowcode',
-    name: 'Forge Creator',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=forge',
-    bio: 'Building the future of minimalist dev tools.',
+    username: 'automacoescomerciais',
+    name: 'Cleudocode Core',
+    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=cleudo',
+    bio: 'Developing Cleudocode: The AI that actually does things.',
     location: 'Remote',
-    followers: 1200,
-    following: 300,
+    followers: 5800,
+    following: 45,
     joinedAt: '2021-05-20',
   }
 ];
@@ -31,56 +31,55 @@ export const MOCK_REPOSITORIES: Repository[] = [
     ownerId: 'u1',
     ownerUsername: 'shadcn',
     name: 'ui',
-    description: 'Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.',
+    description: 'Beautifully designed components for Cleudocode interfaces. Accessible. Customizable. Open Source.',
     stars: 62300,
     forks: 4100,
     language: 'TypeScript',
     visibility: 'public',
     updatedAt: new Date().toISOString(),
-    topics: ['react', 'tailwind', 'components', 'ui'],
+    topics: ['react', 'tailwind', 'cleudocode', 'ui'],
   },
   {
     id: 'r2',
     ownerId: 'u2',
-    ownerUsername: 'madeinlowcode',
-    name: 'forge-git',
-    description: 'A minimalist Git collaboration platform built for speed and beauty.',
-    stars: 890,
-    forks: 45,
+    ownerUsername: 'automacoescomerciais',
+    name: 'cleudocode-ai',
+    description: 'The core engine behind the most powerful automation and content creation AI on the market.',
+    stars: 2540,
+    forks: 180,
     language: 'TypeScript',
     visibility: 'public',
-    updatedAt: subDays(new Date(), 2).toISOString(),
-    topics: ['git', 'minimalist', 'react', 'cloudflare'],
+    updatedAt: subDays(new Date(), 1).toISOString(),
+    topics: ['ai', 'automation', 'automation-comercial', 'typescript'],
   },
   {
     id: 'r3',
     ownerId: 'u2',
-    ownerUsername: 'madeinlowcode',
-    name: 'neon-styles',
-    description: 'A dark-mode first CSS utility library for cyberpunk aesthetics.',
-    stars: 120,
-    forks: 12,
-    language: 'CSS',
+    ownerUsername: 'automacoescomerciais',
+    name: 'smart-marketing',
+    description: 'AI-driven marketing funnel automation for integrated commercial systems.',
+    stars: 840,
+    forks: 56,
+    language: 'Python',
     visibility: 'public',
     updatedAt: subDays(new Date(), 10).toISOString(),
-    topics: ['css', 'cyberpunk', 'ui'],
+    topics: ['marketing', 'automation', 'python'],
   }
 ];
 export const MOCK_FILE_NODES: Record<string, FileNode[]> = {
   'r2': [
-    { id: 'f1', name: 'src', type: 'folder', path: 'src', lastCommitMsg: 'Refactor component structure', lastCommitDate: subDays(new Date(), 1).toISOString() },
-    { id: 'f2', name: 'shared', type: 'folder', path: 'shared', lastCommitMsg: 'Add more mock types', lastCommitDate: subDays(new Date(), 2).toISOString() },
-    { id: 'f3', name: 'worker', type: 'folder', path: 'worker', lastCommitMsg: 'Fix DO persistence', lastCommitDate: subDays(new Date(), 3).toISOString() },
-    { id: 'f4', name: 'package.json', type: 'file', path: 'package.json', lastCommitMsg: 'Bump dependencies', lastCommitDate: subDays(new Date(), 5).toISOString(), content: '{\n  "name": "forge-git",\n  "version": "1.0.0"\n}' },
-    { id: 'f5', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Initial documentation', lastCommitDate: subDays(new Date(), 10).toISOString(), content: '# Forge\n\nMinimalist Git platform.' }
+    { id: 'f1', name: 'src', type: 'folder', path: 'src', lastCommitMsg: 'Implement core Cleudocode reasoning engine', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'f2', name: 'automation', type: 'folder', path: 'automation', lastCommitMsg: 'Add WhatsApp integration hooks', lastCommitDate: subDays(new Date(), 2).toISOString() },
+    { id: 'f3', name: 'configs', type: 'folder', path: 'configs', lastCommitMsg: 'Optimize prompt templates', lastCommitDate: subDays(new Date(), 3).toISOString() },
+    { id: 'f4', name: 'package.json', type: 'file', path: 'package.json', lastCommitMsg: 'Bump Cleudocode core dependencies', lastCommitDate: subDays(new Date(), 5).toISOString(), content: '{\n  "name": "cleudocode-ai",\n  "version": "2.1.0"\n}' },
+    { id: 'f5', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Update brand identity to Cleudocode', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Cleudocode AI\n\nThe AI that actually does things.' }
   ],
   'r2-src': [
-    { id: 'f6', name: 'components', type: 'folder', path: 'src/components', lastCommitMsg: 'Add FileBrowser', lastCommitDate: subDays(new Date(), 1).toISOString() },
-    { id: 'f7', name: 'main.tsx', type: 'file', path: 'src/main.tsx', lastCommitMsg: 'Setup router', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Hello Forge");' }
+    { id: 'f6', name: 'engine', type: 'folder', path: 'src/engine', lastCommitMsg: 'Improve context handling', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'f7', name: 'main.ts', type: 'file', path: 'src/main.ts', lastCommitMsg: 'Bootstrapping Cleudocode', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Cleudocode Initialized");' }
   ],
-  'r2-src-components': [
-    { id: 'f8', name: 'git', type: 'folder', path: 'src/components/git', lastCommitMsg: 'Implement interactive breadcrumbs', lastCommitDate: subDays(new Date(), 1).toISOString() },
-    { id: 'f9', name: 'ThemeToggle.tsx', type: 'file', path: 'src/components/ThemeToggle.tsx', lastCommitMsg: 'Add glow effect', lastCommitDate: subDays(new Date(), 2).toISOString(), content: 'export function ThemeToggle() { ... }' }
+  'r2-src-engine': [
+    { id: 'f8', name: 'processor.ts', type: 'file', path: 'src/engine/processor.ts', lastCommitMsg: 'Enhance task execution logic', lastCommitDate: subDays(new Date(), 1).toISOString(), content: 'export class CleudoProcessor { ... }' }
   ]
 };
 export const MOCK_ISSUES: Issue[] = [
@@ -88,37 +87,25 @@ export const MOCK_ISSUES: Issue[] = [
     id: 'i1',
     repoId: 'r2',
     number: 1,
-    title: 'Implement dynamic file browser',
+    title: 'Cleudocode: Add multi-language support for voice synthesis',
     authorId: 'u2',
     status: 'open',
     labels: ['feature', 'high-priority'],
     createdAt: subDays(new Date(), 2).toISOString(),
     commentsCount: 3,
-    description: 'We need a file browser that can navigate nested directories using React Router splat routes.'
+    description: 'Enable voice synthesis in Portuguese, Spanish and English for automated content agents.'
   },
   {
     id: 'i2',
     repoId: 'r2',
     number: 2,
-    title: 'Fix mobile responsiveness on contribution grid',
+    title: 'Fix: Token limit overflow on deep automation chains',
     authorId: 'u1',
     status: 'closed',
     labels: ['bug'],
     createdAt: subDays(new Date(), 5).toISOString(),
     commentsCount: 1,
-    description: 'The grid overflows on small screens. Needs a horizontal scroll area.'
-  },
-  {
-    id: 'i3',
-    repoId: 'r1',
-    number: 450,
-    title: 'Add accessibility audits to CI',
-    authorId: 'u2',
-    status: 'open',
-    labels: ['accessibility', 'CI'],
-    createdAt: subDays(new Date(), 1).toISOString(),
-    commentsCount: 0,
-    description: 'Automate a11y checks using axe-core in our GitHub Actions.'
+    description: 'Deep nested automation chains were hitting the context window limit.'
   }
 ];
 export const MOCK_PRS: PullRequest[] = [
@@ -126,67 +113,35 @@ export const MOCK_PRS: PullRequest[] = [
     id: 'p1',
     repoId: 'r2',
     number: 3,
-    title: 'Feat: Add syntax highlighting',
+    title: 'Feat: Cleudocode Visual Identity Rebranding',
     authorId: 'u2',
     status: 'open',
     createdAt: subDays(new Date(), 1).toISOString(),
-    description: 'Integrated `react-syntax-highlighter` for better code reading experience.',
+    description: 'Switching all platform references to the new Cleudocode brand.',
     baseBranch: 'main',
-    headBranch: 'feat/syntax-high'
-  },
-  {
-    id: 'p2',
-    repoId: 'r2',
-    number: 4,
-    title: 'Build: Setup Cloudflare Worker',
-    authorId: 'u2',
-    status: 'merged',
-    createdAt: subDays(new Date(), 7).toISOString(),
-    mergedAt: subDays(new Date(), 6).toISOString(),
-    description: 'Initial backend setup using Hono and Durable Objects.',
-    baseBranch: 'main',
-    headBranch: 'infra/worker-setup'
-  },
-  {
-    id: 'p3',
-    repoId: 'r1',
-    number: 1234,
-    title: 'Fix: Navigation dropdown focus trap',
-    authorId: 'u1',
-    status: 'open',
-    createdAt: subDays(new Date(), 2).toISOString(),
-    description: 'Correct focus handling in the main navigation menu.',
-    baseBranch: 'main',
-    headBranch: 'fix/nav-focus'
+    headBranch: 'feat/rebrand-cleudo'
   }
 ];
 export const MOCK_COMMENTS: Record<string, IssueComment[]> = {
   'i1': [
-    { id: 'c1', authorId: 'u1', body: 'I can help with the routing logic. Should we use `*` or a custom regex?', createdAt: subDays(new Date(), 1).toISOString() },
-    { id: 'c2', authorId: 'u2', body: 'Let’s go with `*` for simplicity. React Router 6 handles it well.', createdAt: subHours(new Date(), 12).toISOString() },
-    { id: 'c3', authorId: 'u1', body: 'Sounds good. I’ll open a draft PR shortly.', createdAt: subHours(new Date(), 2).toISOString() }
-  ],
-  'i2': [
-    { id: 'c4', authorId: 'u2', body: 'Fixed this by wrapping the grid in a `ScrollArea` component.', createdAt: subDays(new Date(), 4).toISOString() }
-  ],
-  'p1': [
-    { id: 'c5', authorId: 'u1', body: 'The bundle size might increase. Have we checked the impact?', createdAt: subHours(new Date(), 5).toISOString() }
+    { id: 'c1', authorId: 'u1', body: 'The Brazilian Portuguese model is ready for testing.', createdAt: subDays(new Date(), 1).toISOString() },
+    { id: 'c2', authorId: 'u2', body: 'Excellent. Please merge the PR into the experimental branch.', createdAt: subHours(new Date(), 12).toISOString() }
   ]
 };
 export const MOCK_ACTIVITY: ActivityEvent[] = [
   {
     id: 'e1',
     type: 'push',
-    userUsername: 'madeinlowcode',
-    repoName: 'forge-git',
+    userUsername: 'automacoescomerciais',
+    repoName: 'cleudocode-ai',
     timestamp: new Date().toISOString(),
-    payload: { branch: 'main', commits: 3 }
+    payload: { branch: 'main', commits: 5 }
   },
   {
     id: 'e2',
     type: 'star',
     userUsername: 'shadcn',
-    repoName: 'forge-git',
+    repoName: 'cleudocode-ai',
     timestamp: subDays(new Date(), 1).toISOString(),
   }
 ];

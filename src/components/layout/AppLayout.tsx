@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Github, Search, Bell, Plus, Menu } from "lucide-react";
+import { Terminal, Search, Bell, Plus, Mail, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -18,63 +18,68 @@ type AppLayoutProps = {
   className?: string;
 };
 export function AppLayout({ children, className }: AppLayoutProps): JSX.Element {
+  useEffect(() => {
+    document.title = "Cleudocode - The AI that actually does things.";
+  }, []);
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 max-w-7xl mx-auto items-center px-4 sm:px-6 lg:px-8">
-          <div className="mr-4 flex items-center gap-4">
-            <Link to="/" className="flex items-center space-x-2">
-              <Github className="h-8 w-8" />
-              <span className="hidden font-bold sm:inline-block">Forge</span>
+        <div className="container flex h-16 max-w-7xl mx-auto items-center px-4 sm:px-6 lg:px-8">
+          <div className="mr-4 flex items-center gap-6">
+            <Link to="/" className="flex items-center space-x-2 group">
+              <div className="bg-primary rounded-lg p-1.5 transition-transform group-hover:scale-110">
+                <Terminal className="h-6 w-6 text-primary-foreground" />
+              </div>
+              <span className="hidden font-bold text-xl sm:inline-block tracking-tight">Cleudocode</span>
             </Link>
-            <nav className="flex items-center space-x-4 text-sm font-medium">
-              <Link to="/" className="transition-colors hover:text-foreground/80 text-foreground/60">Explore</Link>
-              <Link to="/issues" className="transition-colors hover:text-foreground/80 text-foreground/60">Issues</Link>
-              <Link to="/pulls" className="transition-colors hover:text-foreground/80 text-foreground/60">Pull Requests</Link>
+            <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+              <Link to="/" className="transition-colors hover:text-foreground text-foreground/60">Explore</Link>
+              <Link to="/issues" className="transition-colors hover:text-foreground text-foreground/60">Issues</Link>
+              <Link to="/pulls" className="transition-colors hover:text-foreground text-foreground/60">Pull Requests</Link>
             </nav>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-4">
             <div className="w-full flex-1 md:w-auto md:flex-none">
               <div className="relative group">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-foreground transition-colors" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-foreground transition-colors" />
                 <Input
                   type="search"
-                  placeholder="Search Forge..."
-                  className="pl-9 w-full md:w-[240px] lg:w-[320px] bg-muted/50 border-transparent focus:bg-background focus:border-border transition-all rounded-md h-9"
+                  placeholder="Search Cleudocode..."
+                  className="pl-10 w-full md:w-[240px] lg:w-[320px] bg-muted/50 border-transparent focus:bg-background focus:border-border transition-all rounded-xl h-10"
                 />
               </div>
             </div>
-            <nav className="flex items-center gap-1">
-              <Button variant="ghost" size="icon" className="h-9 w-9">
-                <Plus className="h-4 w-4" />
+            <nav className="flex items-center gap-2">
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl">
+                <Plus className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-9 w-9">
-                <Bell className="h-4 w-4" />
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl">
+                <Bell className="h-5 w-5" />
               </Button>
               <ThemeToggle className="static" />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full ml-2">
-                    <Avatar className="h-8 w-8 border">
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full ml-2 ring-offset-background transition-all hover:ring-2 hover:ring-primary/20">
+                    <Avatar className="h-9 w-9 border">
                       <AvatarImage src="https://github.com/shadcn.png" />
                       <AvatarFallback>SC</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuContent className="w-56 rounded-xl" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">shadcn</p>
-                      <p className="text-xs leading-none text-muted-foreground">shadcn@example.com</p>
+                      <p className="text-sm font-medium leading-none">Developer</p>
+                      <p className="text-xs leading-none text-muted-foreground">contato@automacoescomerciais.com.br</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/shadcn">Your profile</Link>
+                    <Link to="/automacoescomerciais" className="cursor-pointer">Your profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Log out</DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">Log out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </nav>
@@ -84,11 +89,47 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
       <main className={`flex-1 ${className}`}>
         {children}
       </main>
-      <footer className="border-t py-6 md:px-8 md:py-0">
-        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row max-w-7xl mx-auto px-4">
-          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            Built by <a href="#" className="font-medium underline underline-offset-4">Forge Team</a>. The source code is available on <a href="#" className="font-medium underline underline-offset-4">GitHub</a>.
-          </p>
+      <footer className="border-t bg-muted/20">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Terminal className="h-6 w-6" />
+                <span className="font-bold text-lg">Cleudocode</span>
+              </div>
+              <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+                The AI that actually does things. An exclusive solution by Automações Comerciais Integradas for advanced automation and content creation.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h4 className="font-semibold text-sm uppercase tracking-wider">Contact Us</h4>
+              <div className="space-y-2">
+                <a href="mailto:contato@automacoescomerciais.com.br" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                  <Mail className="h-4 w-4" />
+                  contato@automacoescomerciais.com.br
+                </a>
+                <a href="https://wa.me/558894227586" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-green-500 transition-colors">
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp Support
+                </a>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h4 className="font-semibold text-sm uppercase tracking-wider">Legal</h4>
+              <p className="text-sm text-muted-foreground">
+                © Automações Comerciais Integradas 2026. All rights reserved.
+              </p>
+            </div>
+          </div>
+          <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-muted-foreground">
+              Built with precision for the future of creation. 🤖✨
+            </p>
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <Link to="#" className="hover:underline">Privacy Policy</Link>
+              <Link to="#" className="hover:underline">Terms of Service</Link>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
