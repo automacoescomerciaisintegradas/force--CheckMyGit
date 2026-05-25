@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CircleDot, CheckCircle2, MessageSquare, Plus } from 'lucide-react';
-import { MOCK_ISSUES } from '@shared/mock-data';
+import { MOCK_ISSUES, MOCK_REPOSITORIES } from '@shared/mock-data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 interface IssueListProps {
-  repoId: string;
+  repoId?: string;
 }
 export function IssueList({ repoId }: IssueListProps) {
   const { username, reponame } = useParams();
   const [filter, setFilter] = useState<'open' | 'closed'>('open');
-  const issues = MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === filter);
+  const issues = repoId 
+    ? MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === filter)
+    : MOCK_ISSUES.filter(i => i.status === filter);
+  const getRepoContext = (issueRepoId: string) => {
+    const repo = MOCK_REPOSITORIES.find(r => r.id === issueRepoId);
+    return repo ? `${repo.ownerUsername}/${repo.name}` : 'unknown/repo';
+  };
+  const getIssueLink = (issue: any) => {
+    if (repoId && username && reponame) {
+      return `/${username}/${reponame}/issues/${issue.number}`;
+    }
+    const repo = MOCK_REPOSITORIES.find(r => r.id === issue.repoId);
+    return repo ? `/${repo.ownerUsername}/${repo.name}/issues/${issue.number}` : '#';
+  };
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -25,7 +38,9 @@ export function IssueList({ repoId }: IssueListProps) {
             )}
           >
             <CircleDot className={cn("h-4 w-4", filter === 'open' && "text-green-500")} />
-            {MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'open').length} Open
+            {repoId 
+              ? MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'open').length 
+              : MOCK_ISSUES.filter(i => i.status === 'open').length} Open
           </button>
           <button
             onClick={() => setFilter('closed')}
@@ -35,7 +50,9 @@ export function IssueList({ repoId }: IssueListProps) {
             )}
           >
             <CheckCircle2 className={cn("h-4 w-4", filter === 'closed' && "text-purple-500")} />
-            {MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'closed').length} Closed
+            {repoId 
+              ? MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'closed').length 
+              : MOCK_ISSUES.filter(i => i.status === 'closed').length} Closed
           </button>
         </div>
         <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white rounded-lg gap-1.5">
@@ -47,7 +64,7 @@ export function IssueList({ repoId }: IssueListProps) {
           <div className="p-12 text-center space-y-3">
             <CircleDot className="h-12 w-12 text-muted-foreground/30 mx-auto" />
             <h3 className="text-lg font-semibold">No issues found</h3>
-            <p className="text-muted-foreground">There are no {filter} issues in this repository.</p>
+            <p className="text-muted-foreground">There are no {filter} issues to display.</p>
           </div>
         ) : (
           <div className="divide-y">
@@ -56,10 +73,11 @@ export function IssueList({ repoId }: IssueListProps) {
                 <CircleDot className={cn("h-5 w-5 mt-0.5 flex-shrink-0", issue.status === 'open' ? "text-green-500" : "text-purple-500")} />
                 <div className="space-y-1 flex-1 min-w-0">
                   <div className="flex items-start gap-2 flex-wrap">
-                    <Link 
-                      to={`/${username}/${reponame}/issues/${issue.number}`} 
+                    <Link
+                      to={getIssueLink(issue)}
                       className="font-bold text-base hover:text-primary transition-colors leading-tight"
                     >
+                      {!repoId && <span className="text-muted-foreground font-normal mr-1">{getRepoContext(issue.repoId)}</span>}
                       {issue.title}
                     </Link>
                     <div className="flex gap-1">
@@ -71,7 +89,7 @@ export function IssueList({ repoId }: IssueListProps) {
                     </div>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    #{issue.number} opened {formatDistanceToNow(new Date(issue.createdAt))} ago by <strong>madeinlowcode</strong>
+                    #{issue.number} opened {formatDistanceToNow(new Date(issue.createdAt))} ago
                   </div>
                 </div>
                 {issue.commentsCount > 0 && (

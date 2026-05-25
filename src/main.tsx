@@ -15,6 +15,8 @@ import '@/index.css'
 import { HomePage } from '@/pages/HomePage'
 import { ProfilePage } from '@/pages/ProfilePage'
 import { RepositoryPage } from '@/pages/RepositoryPage'
+import { GlobalIssuesPage } from '@/pages/GlobalIssuesPage'
+import { GlobalPullRequestsPage } from '@/pages/GlobalPullRequestsPage'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -27,6 +29,16 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/issues",
+    element: <GlobalIssuesPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/pulls",
+    element: <GlobalPullRequestsPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {

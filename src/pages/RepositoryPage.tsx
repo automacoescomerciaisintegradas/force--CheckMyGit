@@ -8,10 +8,10 @@ import {
   GitPullRequest,
   Play,
   ShieldAlert,
-  BarChart2,
   Settings,
   BookOpen,
   Eye,
+  AlertTriangle
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
@@ -27,11 +27,25 @@ import { PullRequestDetailPage } from '@/pages/PullRequestDetailPage';
 export function RepositoryPage() {
   const { username, reponame } = useParams();
   const location = useLocation();
-  const repo = MOCK_REPOSITORIES.find(r => r.name === reponame && r.ownerUsername === username) || MOCK_REPOSITORIES[0];
+  const repo = MOCK_REPOSITORIES.find(r => r.name === reponame && r.ownerUsername === username);
+  if (!repo) {
+    return (
+      <AppLayout>
+        <div className="container max-w-7xl mx-auto px-4 py-20 text-center space-y-4">
+          <AlertTriangle className="h-12 w-12 text-destructive mx-auto" />
+          <h1 className="text-3xl font-bold">Repository Not Found</h1>
+          <p className="text-muted-foreground">The repository <strong>{username}/{reponame}</strong> does not exist or you don't have access.</p>
+          <Button asChild className="mt-4">
+            <Link to="/">Go Home</Link>
+          </Button>
+        </div>
+      </AppLayout>
+    );
+  }
   const pathParts = location.pathname.split('/');
   let currentView = 'code';
   if (pathParts.includes('issues')) currentView = 'issues';
-  else if (pathParts.includes('pulls')) currentView = 'pulls';
+  else if (pathParts.includes('pulls') || pathParts.includes('pull')) currentView = 'pulls';
   else if (pathParts.includes('settings')) currentView = 'settings';
   else if (pathParts.includes('actions')) currentView = 'actions';
   else if (pathParts.includes('security')) currentView = 'security';

@@ -77,6 +77,10 @@ export const MOCK_FILE_NODES: Record<string, FileNode[]> = {
   'r2-src': [
     { id: 'f6', name: 'components', type: 'folder', path: 'src/components', lastCommitMsg: 'Add FileBrowser', lastCommitDate: subDays(new Date(), 1).toISOString() },
     { id: 'f7', name: 'main.tsx', type: 'file', path: 'src/main.tsx', lastCommitMsg: 'Setup router', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Hello Forge");' }
+  ],
+  'r2-src-components': [
+    { id: 'f8', name: 'git', type: 'folder', path: 'src/components/git', lastCommitMsg: 'Implement interactive breadcrumbs', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'f9', name: 'ThemeToggle.tsx', type: 'file', path: 'src/components/ThemeToggle.tsx', lastCommitMsg: 'Add glow effect', lastCommitDate: subDays(new Date(), 2).toISOString(), content: 'export function ThemeToggle() { ... }' }
   ]
 };
 export const MOCK_ISSUES: Issue[] = [
@@ -103,6 +107,18 @@ export const MOCK_ISSUES: Issue[] = [
     createdAt: subDays(new Date(), 5).toISOString(),
     commentsCount: 1,
     description: 'The grid overflows on small screens. Needs a horizontal scroll area.'
+  },
+  {
+    id: 'i3',
+    repoId: 'r1',
+    number: 450,
+    title: 'Add accessibility audits to CI',
+    authorId: 'u2',
+    status: 'open',
+    labels: ['accessibility', 'CI'],
+    createdAt: subDays(new Date(), 1).toISOString(),
+    commentsCount: 0,
+    description: 'Automate a11y checks using axe-core in our GitHub Actions.'
   }
 ];
 export const MOCK_PRS: PullRequest[] = [
@@ -130,6 +146,18 @@ export const MOCK_PRS: PullRequest[] = [
     description: 'Initial backend setup using Hono and Durable Objects.',
     baseBranch: 'main',
     headBranch: 'infra/worker-setup'
+  },
+  {
+    id: 'p3',
+    repoId: 'r1',
+    number: 1234,
+    title: 'Fix: Navigation dropdown focus trap',
+    authorId: 'u1',
+    status: 'open',
+    createdAt: subDays(new Date(), 2).toISOString(),
+    description: 'Correct focus handling in the main navigation menu.',
+    baseBranch: 'main',
+    headBranch: 'fix/nav-focus'
   }
 ];
 export const MOCK_COMMENTS: Record<string, IssueComment[]> = {

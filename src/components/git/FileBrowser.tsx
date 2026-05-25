@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 import { Folder, FileCode, ChevronRight, Clock } from 'lucide-react';
 import { MOCK_FILE_NODES } from '@shared/mock-data';
 import { formatDistanceToNow } from 'date-fns';
-import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 interface FileBrowserProps {
   repoId: string;
@@ -11,11 +10,33 @@ interface FileBrowserProps {
 export function FileBrowser({ repoId }: FileBrowserProps) {
   const { username, reponame, '*': splat } = useParams();
   const currentPath = splat || '';
+  // Breadcrumb calculation
+  const pathSegments = currentPath.split('/').filter(Boolean);
   // Simple logic to fetch nodes based on path for mock purposes
   const key = currentPath === '' ? repoId : `${repoId}-${currentPath.replace(/\//g, '-')}`;
   const nodes = MOCK_FILE_NODES[key] || MOCK_FILE_NODES[repoId] || [];
   return (
     <div className="space-y-6">
+      {/* Interactive Breadcrumbs */}
+      <nav className="flex items-center space-x-1 text-sm font-medium text-muted-foreground">
+        <Link to={`/${username}/${reponame}`} className="hover:text-primary transition-colors">
+          {reponame}
+        </Link>
+        {pathSegments.map((segment, idx) => {
+          const path = pathSegments.slice(0, idx + 1).join('/');
+          return (
+            <React.Fragment key={path}>
+              <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+              <Link
+                to={`/${username}/${reponame}/tree/main/${path}`}
+                className={idx === pathSegments.length - 1 ? "text-foreground font-bold" : "hover:text-primary transition-colors"}
+              >
+                {segment}
+              </Link>
+            </React.Fragment>
+          );
+        })}
+      </nav>
       <div className="border rounded-xl bg-card overflow-hidden shadow-sm">
         <div className="bg-muted/50 p-4 flex items-center justify-between border-b">
           <div className="flex items-center gap-2 text-sm font-medium">
@@ -39,7 +60,7 @@ export function FileBrowser({ repoId }: FileBrowserProps) {
                 ) : (
                   <FileCode className="h-4 w-4 text-muted-foreground/70" />
                 )}
-                <Link 
+                <Link
                   to={`/${username}/${reponame}/${node.type === 'folder' ? 'tree' : 'blob'}/main/${node.path}`}
                   className="text-sm font-medium group-hover:text-primary truncate"
                 >
