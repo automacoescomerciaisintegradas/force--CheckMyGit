@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Sparkles, Plus, History, Settings, LogOut, Trash2, Moon, Sun, Cpu } from "lucide-react";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Github, Search, Bell, Plus, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -12,157 +12,85 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { ChatSidebar } from "@/components/chat/ChatSidebar";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api-client";
-import { ChatSession } from "@shared/types";
-import { useTheme } from "@/hooks/use-theme";
+import { Input } from "@/components/ui/input";
 type AppLayoutProps = {
   children: React.ReactNode;
   className?: string;
 };
 export function AppLayout({ children, className }: AppLayoutProps): JSX.Element {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const { isDark, toggleTheme } = useTheme();
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const createSession = useMutation({
-    mutationFn: () => api<ChatSession>('/api/sessions', { method: 'POST' }),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['sessions'] });
-      navigate(`/c/${data.id}`);
-    }
-  });
-  const clearAllChats = useMutation({
-    mutationFn: async () => {
-      const { items } = await api<{ items: ChatSession[] }>('/api/sessions');
-      await Promise.all(items.map(s => api(`/api/sessions/${s.id}`, { method: 'DELETE' })));
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sessions'] });
-      setSettingsOpen(false);
-      navigate('/');
-    }
-  });
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background font-sans selection:bg-primary/10">
-        <ChatSidebar />
-        <SidebarInset className="flex flex-col">
-          <header className="h-14 border-b bg-background/80 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
-            <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <SidebarTrigger className="lg:hidden" />
-                <Link to="/" className="flex items-center gap-2 group lg:hidden">
-                  <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <Sparkles className="w-5 h-5 text-primary-foreground" />
-                  </div>
-                  <span className="font-bold tracking-tight text-lg">Forge</span>
-                </Link>
-              </div>
-              <div className="flex items-center gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="hidden md:flex items-center gap-2 rounded-full h-8 px-4 border-primary/20 hover:bg-primary/5"
-                  onClick={() => createSession.mutate()}
-                  disabled={createSession.isPending}
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span className="text-xs font-semibold">New Chat</span>
-                </Button>
-                <ThemeToggle className="static" />
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0 ring-offset-background focus-visible:ring-2 focus-visible:ring-primary/20">
-                      <Avatar className="h-8 w-8 border">
-                        <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" />
-                        <AvatarFallback>FU</AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end">
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">Forge User</p>
-                        <p className="text-[10px] leading-none text-muted-foreground">Premium Builder</p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setSettingsOpen(true)}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-destructive focus:text-destructive">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Sign out</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-          </header>
-          <main className={`flex-1 overflow-hidden flex flex-col ${className}`}>
-            {children}
-          </main>
-        </SidebarInset>
-      </div>
-      <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
-        <DialogContent className="sm:max-w-[425px] rounded-[32px]">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold">Preferences</DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">
-              Customize your Forge experience
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-6 space-y-6">
-            <div className="space-y-4">
-              <h4 className="text-xs font-bold uppercase text-muted-foreground/60">Appearance</h4>
-              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-2xl border">
-                <div className="flex items-center gap-3">
-                  {isDark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                  <span className="text-sm font-medium">Dark Mode</span>
-                </div>
-                <Button variant="ghost" size="sm" onClick={toggleTheme} className="text-xs rounded-lg">
-                  {isDark ? "Disable" : "Enable"}
-                </Button>
-              </div>
-            </div>
-            <div className="space-y-4">
-              <h4 className="text-xs font-bold uppercase text-muted-foreground/60">AI Persona</h4>
-              <div className="flex flex-wrap gap-2">
-                {['Minimalist', 'Concise', 'Detailed'].map(p => (
-                  <Button key={p} variant={p === 'Minimalist' ? 'secondary' : 'outline'} size="sm" className="text-[11px] rounded-full h-7">
-                    {p}
-                  </Button>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-4 pt-4 border-t">
-              <h4 className="text-xs font-bold uppercase text-destructive/60">Data Management</h4>
-              <Button 
-                variant="destructive" 
-                size="sm" 
-                className="w-full gap-2 rounded-xl h-9"
-                onClick={() => clearAllChats.mutate()}
-                disabled={clearAllChats.isPending}
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Clear All Chat History</span>
-              </Button>
-            </div>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 max-w-7xl mx-auto items-center px-4 sm:px-6 lg:px-8">
+          <div className="mr-4 flex items-center gap-4">
+            <Link to="/" className="flex items-center space-x-2">
+              <Github className="h-8 w-8" />
+              <span className="hidden font-bold sm:inline-block">Forge</span>
+            </Link>
+            <nav className="flex items-center space-x-4 text-sm font-medium">
+              <Link to="/" className="transition-colors hover:text-foreground/80 text-foreground/60">Explore</Link>
+              <Link to="/issues" className="transition-colors hover:text-foreground/80 text-foreground/60">Issues</Link>
+              <Link to="/pulls" className="transition-colors hover:text-foreground/80 text-foreground/60">Pull Requests</Link>
+            </nav>
           </div>
-        </DialogContent>
-      </Dialog>
-    </SidebarProvider>
+          <div className="flex flex-1 items-center justify-end space-x-4">
+            <div className="w-full flex-1 md:w-auto md:flex-none">
+              <div className="relative group">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-foreground transition-colors" />
+                <Input
+                  type="search"
+                  placeholder="Search Forge..."
+                  className="pl-9 w-full md:w-[240px] lg:w-[320px] bg-muted/50 border-transparent focus:bg-background focus:border-border transition-all rounded-md h-9"
+                />
+              </div>
+            </div>
+            <nav className="flex items-center gap-1">
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Plus className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Bell className="h-4 w-4" />
+              </Button>
+              <ThemeToggle className="static" />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full ml-2">
+                    <Avatar className="h-8 w-8 border">
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>SC</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">shadcn</p>
+                      <p className="text-xs leading-none text-muted-foreground">shadcn@example.com</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/shadcn">Your profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Log out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </nav>
+          </div>
+        </div>
+      </header>
+      <main className={`flex-1 ${className}`}>
+        {children}
+      </main>
+      <footer className="border-t py-6 md:px-8 md:py-0">
+        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row max-w-7xl mx-auto px-4">
+          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+            Built by <a href="#" className="font-medium underline underline-offset-4">Forge Team</a>. The source code is available on <a href="#" className="font-medium underline underline-offset-4">GitHub</a>.
+          </p>
+        </div>
+      </footer>
+    </div>
   );
 }

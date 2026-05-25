@@ -13,6 +13,8 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { RouteErrorBoundary } from '@/components/RouteErrorBoundary';
 import '@/index.css'
 import { HomePage } from '@/pages/HomePage'
+import { ProfilePage } from '@/pages/ProfilePage'
+import { RepositoryPage } from '@/pages/RepositoryPage'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -28,8 +30,13 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
   },
   {
-    path: "/c/:sessionId",
-    element: <HomePage />,
+    path: "/:username",
+    element: <ProfilePage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/:username/:reponame/*",
+    element: <RepositoryPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {
