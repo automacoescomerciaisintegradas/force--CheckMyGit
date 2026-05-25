@@ -81,7 +81,8 @@ function runSetupCommands() {
     "bun add react-markdown@^9.0.3",
     "bun add react-syntax-highlighter@^15.6.1",
     "bun add framer-motion",
-    "bun add react-syntax-highlighter"
+    "bun add react-syntax-highlighter",
+    "bun add lucide-react react-router-dom react-markdown react-syntax-highlighter date-fns clsx tailwind-merge framer-motion"
 ];
     
     if (commands.length === 0) {
