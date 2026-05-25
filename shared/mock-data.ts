@@ -1,5 +1,5 @@
-import { User, Repository, Issue, PullRequest, ActivityEvent, ContributionDay } from './types';
-import { subDays, format, startOfOfYear, eachDayOfInterval } from 'date-fns';
+import { User, Repository, Issue, PullRequest, ActivityEvent, ContributionDay, FileNode } from './types';
+import { subDays, format, startOfYear, eachDayOfInterval } from 'date-fns';
 export const MOCK_USERS: User[] = [
   {
     id: 'u1',
@@ -53,17 +53,62 @@ export const MOCK_REPOSITORIES: Repository[] = [
     topics: ['git', 'minimalist', 'react', 'cloudflare'],
   }
 ];
+export const MOCK_FILE_NODES: Record<string, FileNode[]> = {
+  'r2': [
+    { id: 'f1', name: 'src', type: 'folder', path: 'src', lastCommitMsg: 'Refactor component structure', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'f2', name: 'shared', type: 'folder', path: 'shared', lastCommitMsg: 'Add more mock types', lastCommitDate: subDays(new Date(), 2).toISOString() },
+    { id: 'f3', name: 'worker', type: 'folder', path: 'worker', lastCommitMsg: 'Fix DO persistence', lastCommitDate: subDays(new Date(), 3).toISOString() },
+    { id: 'f4', name: 'package.json', type: 'file', path: 'package.json', lastCommitMsg: 'Bump dependencies', lastCommitDate: subDays(new Date(), 5).toISOString(), content: '{\n  "name": "forge-git",\n  "version": "1.0.0"\n}' },
+    { id: 'f5', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Initial documentation', lastCommitDate: subDays(new Date(), 10).toISOString(), content: '# Forge\n\nMinimalist Git platform.' }
+  ],
+  'r2-src': [
+    { id: 'f6', name: 'components', type: 'folder', path: 'src/components', lastCommitMsg: 'Add FileBrowser', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'f7', name: 'main.tsx', type: 'file', path: 'src/main.tsx', lastCommitMsg: 'Setup router', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Hello Forge");' }
+  ]
+};
 export const MOCK_ISSUES: Issue[] = [
   {
     id: 'i1',
-    repoId: 'r1',
-    number: 142,
-    title: 'Add accessible data-table component',
+    repoId: 'r2',
+    number: 1,
+    title: 'Implement dynamic file browser',
     authorId: 'u2',
     status: 'open',
-    labels: ['enhancement', 'help wanted'],
+    labels: ['feature', 'high-priority'],
+    createdAt: subDays(new Date(), 2).toISOString(),
+    commentsCount: 3,
+  },
+  {
+    id: 'i2',
+    repoId: 'r2',
+    number: 2,
+    title: 'Fix mobile responsiveness on contribution grid',
+    authorId: 'u1',
+    status: 'closed',
+    labels: ['bug'],
     createdAt: subDays(new Date(), 5).toISOString(),
-    commentsCount: 12,
+    commentsCount: 0,
+  }
+];
+export const MOCK_PRS: PullRequest[] = [
+  {
+    id: 'p1',
+    repoId: 'r2',
+    number: 3,
+    title: 'Feat: Add syntax highlighting',
+    authorId: 'u2',
+    status: 'open',
+    createdAt: subDays(new Date(), 1).toISOString(),
+  },
+  {
+    id: 'p2',
+    repoId: 'r2',
+    number: 4,
+    title: 'Build: Setup Cloudflare Worker',
+    authorId: 'u2',
+    status: 'merged',
+    createdAt: subDays(new Date(), 7).toISOString(),
+    mergedAt: subDays(new Date(), 6).toISOString(),
   }
 ];
 export const MOCK_ACTIVITY: ActivityEvent[] = [

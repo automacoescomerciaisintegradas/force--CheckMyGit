@@ -1,38 +1,43 @@
 import { IndexedEntity } from "./core-utils";
-import type { User, ChatSession, ChatMessage } from "@shared/types";
-import { MOCK_USERS } from "@shared/mock-data";
+import type { User, Repository, Issue } from "@shared/types";
+import { MOCK_USERS, MOCK_REPOSITORIES, MOCK_ISSUES } from "@shared/mock-data";
 export class UserEntity extends IndexedEntity<User> {
   static readonly entityName = "user";
   static readonly indexName = "users";
-  static readonly initialState: User = { id: "", name: "" };
+  static readonly initialState: User = { id: "", username: "", name: "", avatar: "", followers: 0, following: 0, joinedAt: "" };
   static seedData = MOCK_USERS;
 }
-export class ChatSessionEntity extends IndexedEntity<ChatSession> {
-  static readonly entityName = "chat_session";
-  static readonly indexName = "chat_sessions";
-  static readonly initialState: ChatSession = {
+export class RepositoryEntity extends IndexedEntity<Repository> {
+  static readonly entityName = "repository";
+  static readonly indexName = "repositories";
+  static readonly initialState: Repository = {
     id: "",
-    title: "New Chat",
-    messages: [],
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-    userId: "user_1"
+    ownerId: "",
+    ownerUsername: "",
+    name: "",
+    description: "",
+    stars: 0,
+    forks: 0,
+    language: "TypeScript",
+    visibility: "public",
+    updatedAt: new Date().toISOString(),
+    topics: []
   };
-  static seedData = [];
-  async addMessage(message: ChatMessage): Promise<ChatSession> {
-    return this.mutate(state => {
-      const nextMessages = [...state.messages, message];
-      let nextTitle = state.title;
-      // Auto-generate title from first user message
-      if (state.title === "New Chat" && message.role === 'user') {
-        nextTitle = message.content.slice(0, 40) + (message.content.length > 40 ? "..." : "");
-      }
-      return {
-        ...state,
-        title: nextTitle,
-        messages: nextMessages,
-        updatedAt: Date.now()
-      };
-    });
-  }
+  static seedData = MOCK_REPOSITORIES;
+}
+export class IssueEntity extends IndexedEntity<Issue> {
+  static readonly entityName = "issue";
+  static readonly indexName = "issues";
+  static readonly initialState: Issue = {
+    id: "",
+    repoId: "",
+    number: 0,
+    title: "",
+    authorId: "",
+    status: "open",
+    labels: [],
+    createdAt: new Date().toISOString(),
+    commentsCount: 0
+  };
+  static seedData = MOCK_ISSUES;
 }
