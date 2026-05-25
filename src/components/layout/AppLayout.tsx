@@ -1,189 +1,94 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Github, Search, Plus, Bell, ChevronDown, Menu, File, Book } from "lucide-react";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Sparkles, Plus, History, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
-import { cn } from "@/lib/utils";
-import { MOCK_REPOS, MOCK_FILE_TREE } from "@shared/mock-data";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
+import { ChatSession } from "@shared/types";
 type AppLayoutProps = {
   children: React.ReactNode;
   className?: string;
 };
 export function AppLayout({ children, className }: AppLayoutProps): JSX.Element {
-  const location = useLocation();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
-      }
-      if (e.key === "t" && e.target instanceof HTMLBodyElement) {
-        e.preventDefault();
-        setOpen(true);
-      }
-    };
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, []);
-  const navLinks = [
-    { label: "Pull requests", path: "/pulls" },
-    { label: "Issues", path: "/issues" },
-    { label: "Explore", path: "/explore" },
-  ];
+  const createSession = useMutation({
+    mutationFn: () => api<ChatSession>('/api/sessions', { method: 'POST' }),
+    onSuccess: (data) => {
+      navigate(`/c/${data.id}`);
+    }
+  });
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="h-16 border-b bg-background sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4 flex-1">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden">
-                  <Menu className="w-5 h-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left">
-                <SheetHeader className="mb-6">
-                  <SheetTitle className="flex items-center gap-2">
-                    <Github className="w-6 h-6" /> Forge
-                  </SheetTitle>
-                </SheetHeader>
-                <nav className="flex flex-col gap-4">
-                  {navLinks.map(link => (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      className={cn(
-                        "text-lg font-medium py-2 px-4 rounded-md hover:bg-muted transition-colors",
-                        location.pathname === link.path && "bg-muted text-primary"
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </nav>
-              </SheetContent>
-            </Sheet>
-            <Link to="/" className="hover:opacity-80 transition-opacity">
-              <Github className="w-8 h-8" />
-            </Link>
-            <div className="hidden md:flex items-center gap-1 flex-1 max-w-sm">
-              <div 
-                className="relative w-full group cursor-pointer"
-                onClick={() => setOpen(true)}
-              >
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                <Input
-                  readOnly
-                  placeholder="Search or jump to..."
-                  className="pl-9 bg-secondary/50 border-none h-8 text-sm cursor-pointer w-full"
-                />
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 hidden lg:flex items-center gap-0.5 border rounded px-1.5 py-0 bg-background text-[10px] text-muted-foreground font-mono">
-                  <span>⌘</span><span>K</span>
-                </div>
+    <div className="min-h-screen bg-background flex flex-col font-sans selection:bg-primary/10">
+      <header className="h-14 border-b bg-background/80 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
+        <div className="max-w-5xl mx-auto h-full px-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
-            </div>
-            <nav className="hidden lg:flex items-center gap-1 text-sm font-semibold">
-              {navLinks.map(link => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={cn(
-                    "px-3 py-1.5 rounded-md transition-colors",
-                    location.pathname === link.path ? "text-primary bg-muted/50" : "text-muted-foreground hover:text-primary hover:bg-muted/30"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
+              <span className="font-bold tracking-tight text-lg hidden sm:inline-block">Forge AI</span>
+            </Link>
           </div>
           <div className="flex items-center gap-2">
-            <ThemeToggle className="static" />
-            <Button variant="ghost" size="icon" className="hidden sm:flex hover:bg-muted/50">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="hidden sm:flex items-center gap-2 rounded-full h-9"
+              onClick={() => createSession.mutate()}
+              disabled={createSession.isPending}
+            >
               <Plus className="w-4 h-4" />
-              <ChevronDown className="w-3 h-3 ml-0.5" />
+              <span>New Chat</span>
             </Button>
-            <Button variant="ghost" size="icon" className="hover:bg-muted/50">
-              <Bell className="w-4 h-4" />
-            </Button>
-            <Link to="/forge-dev">
-              <Avatar className="w-8 h-8 border ring-offset-background transition-shadow hover:ring-2 hover:ring-ring">
-                <AvatarImage src="https://github.com/forge-dev.png" />
-                <AvatarFallback>FD</AvatarFallback>
-              </Avatar>
-            </Link>
+            <ThemeToggle className="static" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0">
+                  <Avatar className="h-9 w-9 border transition-all hover:ring-2 hover:ring-primary/20">
+                    <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" />
+                    <AvatarFallback>FU</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">Forge User</p>
+                    <p className="text-xs leading-none text-muted-foreground">user@forge.ai</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer">
+                  <History className="mr-2 h-4 w-4" />
+                  <span>Chat History</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a repository or file name..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Repositories">
-            {MOCK_REPOS.map((repo) => (
-              <CommandItem
-                key={repo.id}
-                onSelect={() => {
-                  navigate(`/${repo.owner}/${repo.name}`);
-                  setOpen(false);
-                }}
-              >
-                <Book className="mr-2 h-4 w-4" />
-                <span>{repo.owner}/{repo.name}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Files">
-            {MOCK_FILE_TREE.filter(f => f.type === 'file').map((file) => (
-              <CommandItem
-                key={file.path}
-                onSelect={() => {
-                  navigate(`/forge-dev/forge-git/blob/main/${file.path}`);
-                  setOpen(false);
-                }}
-              >
-                <File className="mr-2 h-4 w-4" />
-                <span>{file.path}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
-      <main className={`flex-1 ${className}`}>
+      <main className={`flex-1 overflow-hidden flex flex-col ${className}`}>
         {children}
       </main>
-      <footer className="border-t py-12 bg-background mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-8 text-xs text-muted-foreground">
-          <div className="flex items-center gap-4">
-            <Github className="w-5 h-5 opacity-40" />
-            <span className="font-medium">© 2023 Forge Git Platform</span>
-          </div>
-          <div className="flex flex-wrap justify-center gap-6">
-            <a href="#" className="hover:text-primary transition-colors">Blog</a>
-            <a href="#" className="hover:text-primary transition-colors">About</a>
-            <a href="#" className="hover:text-primary transition-colors">Customer Service</a>
-            <a href="#" className="hover:text-primary transition-colors">API</a>
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Security</a>
-            <a href="#" className="hover:text-primary transition-colors font-bold">Docs</a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

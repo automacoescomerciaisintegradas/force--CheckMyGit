@@ -13,17 +13,14 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { RouteErrorBoundary } from '@/components/RouteErrorBoundary';
 import '@/index.css'
 import { HomePage } from '@/pages/HomePage'
-import { ProfilePage } from '@/pages/ProfilePage'
-import { RepoLayout } from '@/pages/RepoLayout'
-import { RepoCodePage } from '@/pages/RepoCodePage'
-import { RepoFileViewer } from '@/pages/RepoFileViewer'
-import { RepoIssuesPage } from '@/pages/RepoIssuesPage'
-import { RepoIssueDetail } from '@/pages/RepoIssueDetail'
-import { RepoPullRequestsPage } from '@/pages/RepoPullRequestsPage'
-import { ExplorePage } from '@/pages/ExplorePage'
-import { GlobalIssuesPage } from '@/pages/GlobalIssuesPage'
-import { RepoActionsPage } from '@/pages/RepoActionsPage'
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 const router = createBrowserRouter([
   {
     path: "/",
@@ -31,33 +28,9 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
   },
   {
-    path: "/explore",
-    element: <ExplorePage />,
+    path: "/c/:sessionId",
+    element: <HomePage />,
     errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/issues",
-    element: <GlobalIssuesPage />,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/:username",
-    element: <ProfilePage />,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/:username/:repo",
-    element: <RepoLayout />,
-    errorElement: <RouteErrorBoundary />,
-    children: [
-      { index: true, element: <RepoCodePage /> },
-      { path: "tree/:branch/*", element: <RepoCodePage /> },
-      { path: "blob/:branch/*", element: <RepoFileViewer /> },
-      { path: "issues", element: <RepoIssuesPage /> },
-      { path: "issues/:issueId", element: <RepoIssueDetail /> },
-      { path: "pulls", element: <RepoPullRequestsPage /> },
-      { path: "actions", element: <RepoActionsPage /> },
-    ]
   },
   {
     path: "*",

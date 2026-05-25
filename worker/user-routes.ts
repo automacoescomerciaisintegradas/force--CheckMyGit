@@ -1,62 +1,60 @@
 import { Hono } from "hono";
 import type { Env } from './core-utils';
-import { UserEntity, RepositoryEntity, IssueEntity } from "./entities";
-import { ok, bad, notFound, isStr } from './core-utils';
+import { ChatSessionEntity, UserEntity } from "./entities";
+import { ok, bad, notFound } from './core-utils';
+import { ChatMessage } from "@shared/types";
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
-  // REPOS
-  app.get('/api/repos', async (c) => {
-    await RepositoryEntity.ensureSeed(c.env);
-    const page = await RepositoryEntity.list(c.env, c.req.query('cursor') ?? null, 50);
-    return ok(c, page);
+  // SESSIONS
+  app.get('/api/sessions', async (c) => {
+    const page = await ChatSessionEntity.list(c.env, c.req.query('cursor') ?? null, 20);
+    // Sort by updated time descending
+    const sorted = page.items.sort((a, b) => b.updatedAt - a.updatedAt);
+    return ok(c, { items: sorted, next: page.next });
   });
-  app.get('/api/repos/:owner/:name', async (c) => {
-    const { owner, name } = c.req.param();
-    const { items } = await RepositoryEntity.list(c.env);
-    const repo = items.find(r => r.owner === owner && r.name === name);
-    if (!repo) return notFound(c, 'Repository not found');
-    return ok(c, repo);
+  app.get('/api/sessions/:id', async (c) => {
+    const session = new ChatSessionEntity(c.env, c.req.param('id'));
+    if (!await session.exists()) return notFound(c, 'Session not found');
+    return ok(c, await session.getState());
   });
-  app.post('/api/repos', async (c) => {
-    const data = await c.req.json();
-    if (!data.name || !data.owner) return bad(c, 'name and owner required');
-    const repo = await RepositoryEntity.create(c.env, {
-      ...RepositoryEntity.initialState,
-      ...data,
-      id: crypto.randomUUID(),
-      updatedAt: new Date().toISOString()
+  app.post('/api/sessions', async (c) => {
+    const id = crypto.randomUUID();
+    const session = await ChatSessionEntity.create(c.env, {
+      ...ChatSessionEntity.initialState,
+      id,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
     });
-    return ok(c, repo);
+    return ok(c, session);
   });
-  app.post('/api/repos/:id/star', async (c) => {
-    const id = c.req.param('id');
-    const repo = new RepositoryEntity(c.env, id);
-    if (!await repo.exists()) return notFound(c, 'Repo not found');
-    const state = await repo.mutate(s => ({ ...s, stars: s.stars + 1, isStarred: true }));
-    return ok(c, state);
-  });
-  // ISSUES
-  app.get('/api/issues', async (c) => {
-    await IssueEntity.ensureSeed(c.env);
-    const repoId = c.req.query('repoId');
-    const { items } = await IssueEntity.list(c.env);
-    const filtered = repoId ? items.filter(i => i.repoId === repoId) : items;
-    return ok(c, { items: filtered, next: null });
-  });
-  app.post('/api/issues', async (c) => {
-    const data = await c.req.json();
-    if (!data.title || !data.repoId) return bad(c, 'title and repoId required');
-    const issue = await IssueEntity.create(c.env, {
-      ...IssueEntity.initialState,
-      ...data,
+  // CHAT
+  app.post('/api/chat/:sessionId', async (c) => {
+    const sessionId = c.req.param('sessionId');
+    const { content } = await c.req.json();
+    if (!content) return bad(c, 'Message content required');
+    const session = new ChatSessionEntity(c.env, sessionId);
+    if (!await session.exists()) return notFound(c, 'Session not found');
+    // 1. Save User Message
+    const userMsg: ChatMessage = {
       id: crypto.randomUUID(),
-      createdAt: new Date().toISOString()
-    });
-    return ok(c, issue);
+      role: 'user',
+      content,
+      timestamp: Date.now()
+    };
+    await session.addMessage(userMsg);
+    // 2. Simulate AI Delay & Response
+    // In a real app, you'd call OpenAI/Workers AI here
+    const aiResponseContent = `I received your message: "${content}". This is a placeholder response from Forge AI. In the next phase, I'll be connected to a real LLM.`;
+    const aiMsg: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: 'assistant',
+      content: aiResponseContent,
+      timestamp: Date.now()
+    };
+    const updatedSession = await session.addMessage(aiMsg);
+    return ok(c, updatedSession);
   });
-  // USERS
-  app.get('/api/users/:id', async (c) => {
-    const user = new UserEntity(c.env, c.req.param('id'));
-    if (!await user.exists()) return notFound(c);
-    return ok(c, await user.getState());
+  app.delete('/api/sessions/:id', async (c) => {
+    const success = await ChatSessionEntity.delete(c.env, c.req.param('id'));
+    return ok(c, { success });
   });
 }
