@@ -91,6 +91,18 @@ export const MOCK_REPOS: Repo[] = [
     updatedAt: '2023-10-25T15:45:00Z',
     language: 'CSS',
     topics: ['design', 'css', 'minimalism']
+  },
+  {
+    id: 'r5',
+    name: 'rust-engine-2d',
+    owner: 'octocat',
+    description: 'A performant 2D game engine written in Rust for WebAssembly.',
+    stars: 5600,
+    forks: 312,
+    visibility: 'public',
+    updatedAt: '2023-10-26T09:00:00Z',
+    language: 'Rust',
+    topics: ['wasm', 'gamedev', 'rust']
   }
 ];
 export const MOCK_ISSUES: Issue[] = [
@@ -102,7 +114,10 @@ export const MOCK_ISSUES: Issue[] = [
     status: 'open',
     createdAt: '2023-10-20T14:20:00Z',
     commentsCount: 3,
-    labels: [{ name: 'enhancement', color: 'bg-blue-100 text-blue-700 border-blue-200' }, { name: 'ui', color: 'bg-purple-100 text-purple-700 border-purple-200' }]
+    labels: [
+      { name: 'enhancement', color: 'bg-blue-100 text-blue-700 border-blue-200' }, 
+      { name: 'ui', color: 'bg-purple-100 text-purple-700 border-purple-200' }
+    ]
   },
   {
     id: '2',
@@ -129,13 +144,6 @@ export const MOCK_COMMENTS: IssueComment[] = [
     authorId: 'forge-dev',
     content: "Great! Make sure to handle deep nesting. We need to be able to navigate into `src/components/ui` easily.",
     createdAt: '2023-10-21T11:30:00Z'
-  },
-  {
-    id: 'c3',
-    issueId: '1',
-    authorId: 'alice',
-    content: "Don't forget to add a file search shortcut like GitHub's 't' key.",
-    createdAt: '2023-10-22T09:15:00Z'
   }
 ];
 export const MOCK_FILE_TREE: FileNode[] = [
@@ -146,19 +154,38 @@ export const MOCK_FILE_TREE: FileNode[] = [
     lastCommitMessage: 'refactor: split layout components',
     lastCommitDate: '2 hours ago',
     children: [
-      { 
-        name: 'components', 
-        type: 'folder', 
-        path: 'src/components', 
-        lastCommitMessage: 'feat: add issue detail view', 
+      {
+        name: 'components',
+        type: 'folder',
+        path: 'src/components',
+        lastCommitMessage: 'feat: add issue detail view',
         lastCommitDate: '3 hours ago',
         children: [
           { name: 'AppSidebar.tsx', type: 'file', path: 'src/components/AppSidebar.tsx', lastCommitMessage: 'initial sidebar', lastCommitDate: '5 days ago', content: 'export default function Sidebar() {}' },
           { name: 'MarkdownViewer.tsx', type: 'file', path: 'src/components/MarkdownViewer.tsx', lastCommitMessage: 'feat: markdown rendering', lastCommitDate: '1 day ago', content: 'export function MarkdownViewer() {}' }
         ]
       },
-      { name: 'App.tsx', type: 'file', path: 'src/App.tsx', lastCommitMessage: 'feat: add routing', lastCommitDate: '1 day ago', content: 'export default function App() { return <div>Forge</div> }' },
-      { name: 'main.tsx', type: 'file', path: 'src/main.tsx', lastCommitMessage: 'initial commit', lastCommitDate: '5 days ago', content: 'import React from "react";' }
+      {
+        name: 'hooks',
+        type: 'folder',
+        path: 'src/hooks',
+        lastCommitMessage: 'feat: add use-theme hook',
+        lastCommitDate: '1 day ago',
+        children: [
+          { name: 'use-theme.ts', type: 'file', path: 'src/hooks/use-theme.ts', lastCommitMessage: 'initial hook', lastCommitDate: '1 day ago', content: 'export const useTheme = () => {}' }
+        ]
+      },
+      {
+        name: 'lib',
+        type: 'folder',
+        path: 'src/lib',
+        lastCommitMessage: 'chore: add utility functions',
+        lastCommitDate: '10 hours ago',
+        children: [
+          { name: 'utils.ts', type: 'file', path: 'src/lib/utils.ts', lastCommitMessage: 'add cn helper', lastCommitDate: '10 hours ago', content: 'import { clsx } from "clsx"' }
+        ]
+      },
+      { name: 'App.tsx', type: 'file', path: 'src/App.tsx', lastCommitMessage: 'feat: add routing', lastCommitDate: '1 day ago', content: 'export default function App() { return <div>Forge</div> }' }
     ]
   },
   {
@@ -175,7 +202,7 @@ export const MOCK_FILE_TREE: FileNode[] = [
     path: 'package.json',
     lastCommitMessage: 'chore: add react-markdown',
     lastCommitDate: '1 hour ago',
-    content: '{ "name": "forge" }'
+    content: '{ "name": "forge", "version": "1.0.0" }'
   }
 ];
 export function generateContributionData() {

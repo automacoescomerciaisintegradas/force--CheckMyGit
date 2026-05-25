@@ -3,10 +3,12 @@ import { Link, useParams } from 'react-router-dom';
 import { Folder, File, History, ChevronRight, Terminal } from 'lucide-react';
 import { MOCK_FILE_TREE, FileNode } from '@shared/mock-data';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
+import { cn } from '@/lib/utils';
 export function RepoCodePage() {
   const { username, repo, "*": splatPath } = useParams();
-  // Resolve the current folder based on the splat path
   const resolvePath = (nodes: FileNode[], pathParts: string[]): FileNode[] => {
     if (!pathParts.length || pathParts[0] === '') return nodes;
     const [current, ...rest] = pathParts;
@@ -15,11 +17,10 @@ export function RepoCodePage() {
       if (rest.length === 0) return found.children;
       return resolvePath(found.children, rest);
     }
-    return nodes; // Fallback to root or current if not found
+    return nodes;
   };
   const pathParts = splatPath ? splatPath.split('/') : [];
-  const currentFiles = resolvePath(MOCK_FILE_TREE, pathParts);
-  // Breadcrumb generator
+  const currentFiles = resolvePath(MOCK_FILE_TREE, pathParts) ?? [];
   const breadcrumbs = [
     { name: repo, path: `/${username}/${repo}` },
     ...pathParts.map((part, idx) => ({
@@ -28,6 +29,11 @@ export function RepoCodePage() {
     }))
   ];
   const readme = currentFiles.find(f => f.name.toLowerCase() === 'readme.md');
+  // Folder-first sorting
+  const sortedFiles = [...currentFiles].sort((a, b) => {
+    if (a.type === b.type) return a.name.localeCompare(b.name);
+    return a.type === 'folder' ? -1 : 1;
+  });
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -39,8 +45,8 @@ export function RepoCodePage() {
           <div className="flex items-center gap-1 text-muted-foreground">
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={crumb.path}>
-                <Link 
-                  to={crumb.path} 
+                <Link
+                  to={crumb.path}
                   className={cn("hover:text-blue-600 hover:underline", idx === breadcrumbs.length - 1 && "font-bold text-foreground")}
                 >
                   {crumb.name}
@@ -73,7 +79,7 @@ export function RepoCodePage() {
         </div>
         <Table>
           <TableBody>
-            {currentFiles.sort((a, b) => (a.type === b.type ? 0 : a.type === 'folder' ? -1 : 1)).map((node) => (
+            {sortedFiles.map((node) => (
               <TableRow key={node.path} className="group cursor-pointer hover:bg-muted/20 border-none">
                 <TableCell className="py-2 w-8">
                   {node.type === 'folder' ? <Folder className="w-4 h-4 text-blue-400 fill-blue-400" /> : <File className="w-4 h-4 text-muted-foreground" />}

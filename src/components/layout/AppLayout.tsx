@@ -1,18 +1,44 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Github, Search, Plus, Bell, ChevronDown, Menu } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Github, Search, Plus, Bell, ChevronDown, Menu, File, Book } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { MOCK_REPOS, MOCK_FILE_TREE } from "@shared/mock-data";
 type AppLayoutProps = {
   children: React.ReactNode;
   className?: string;
 };
 export function AppLayout({ children, className }: AppLayoutProps): JSX.Element {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+      if (e.key === "t" && e.target instanceof HTMLBodyElement) {
+        e.preventDefault();
+        setOpen(true);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
   const navLinks = [
     { label: "Pull requests", path: "/pulls" },
     { label: "Issues", path: "/issues" },
@@ -37,9 +63,9 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
                 </SheetHeader>
                 <nav className="flex flex-col gap-4">
                   {navLinks.map(link => (
-                    <Link 
-                      key={link.path} 
-                      to={link.path} 
+                    <Link
+                      key={link.path}
+                      to={link.path}
                       className={cn(
                         "text-lg font-medium py-2 px-4 rounded-md hover:bg-muted transition-colors",
                         location.pathname === link.path && "bg-muted text-primary"
@@ -55,11 +81,15 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
               <Github className="w-8 h-8" />
             </Link>
             <div className="hidden md:flex items-center gap-1 flex-1 max-w-sm">
-              <div className="relative w-full group">
+              <div 
+                className="relative w-full group cursor-pointer"
+                onClick={() => setOpen(true)}
+              >
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                 <Input
+                  readOnly
                   placeholder="Search or jump to..."
-                  className="pl-9 bg-secondary/50 border-none h-8 text-sm focus-visible:ring-1 focus-visible:ring-ring w-full transition-all"
+                  className="pl-9 bg-secondary/50 border-none h-8 text-sm cursor-pointer w-full"
                 />
                 <div className="absolute right-2 top-1/2 -translate-y-1/2 hidden lg:flex items-center gap-0.5 border rounded px-1.5 py-0 bg-background text-[10px] text-muted-foreground font-mono">
                   <span>⌘</span><span>K</span>
@@ -68,9 +98,9 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
             </div>
             <nav className="hidden lg:flex items-center gap-1 text-sm font-semibold">
               {navLinks.map(link => (
-                <Link 
-                  key={link.path} 
-                  to={link.path} 
+                <Link
+                  key={link.path}
+                  to={link.path}
                   className={cn(
                     "px-3 py-1.5 rounded-md transition-colors",
                     location.pathname === link.path ? "text-primary bg-muted/50" : "text-muted-foreground hover:text-primary hover:bg-muted/30"
@@ -99,6 +129,41 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
           </div>
         </div>
       </header>
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Type a repository or file name..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Repositories">
+            {MOCK_REPOS.map((repo) => (
+              <CommandItem
+                key={repo.id}
+                onSelect={() => {
+                  navigate(`/${repo.owner}/${repo.name}`);
+                  setOpen(false);
+                }}
+              >
+                <Book className="mr-2 h-4 w-4" />
+                <span>{repo.owner}/{repo.name}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Files">
+            {MOCK_FILE_TREE.filter(f => f.type === 'file').map((file) => (
+              <CommandItem
+                key={file.path}
+                onSelect={() => {
+                  navigate(`/forge-dev/forge-git/blob/main/${file.path}`);
+                  setOpen(false);
+                }}
+              >
+                <File className="mr-2 h-4 w-4" />
+                <span>{file.path}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
       <main className={`flex-1 ${className}`}>
         {children}
       </main>
@@ -113,10 +178,8 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
             <a href="#" className="hover:text-primary transition-colors">About</a>
             <a href="#" className="hover:text-primary transition-colors">Customer Service</a>
             <a href="#" className="hover:text-primary transition-colors">API</a>
-            <a href="#" className="hover:text-primary transition-colors">Training</a>
             <a href="#" className="hover:text-primary transition-colors">Privacy</a>
             <a href="#" className="hover:text-primary transition-colors">Security</a>
-            <a href="#" className="hover:text-primary transition-colors">Status</a>
             <a href="#" className="hover:text-primary transition-colors font-bold">Docs</a>
           </div>
         </div>
