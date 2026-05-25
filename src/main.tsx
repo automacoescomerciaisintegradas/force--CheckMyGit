@@ -18,11 +18,25 @@ import { RepoLayout } from '@/pages/RepoLayout'
 import { RepoCodePage } from '@/pages/RepoCodePage'
 import { RepoFileViewer } from '@/pages/RepoFileViewer'
 import { RepoIssuesPage } from '@/pages/RepoIssuesPage'
+import { RepoIssueDetail } from '@/pages/RepoIssueDetail'
+import { RepoPullRequestsPage } from '@/pages/RepoPullRequestsPage'
+import { ExplorePage } from '@/pages/ExplorePage'
+import { GlobalIssuesPage } from '@/pages/GlobalIssuesPage'
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/explore",
+    element: <ExplorePage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/issues",
+    element: <GlobalIssuesPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {
@@ -39,6 +53,8 @@ const router = createBrowserRouter([
       { path: "tree/:branch/*", element: <RepoCodePage /> },
       { path: "blob/:branch/*", element: <RepoFileViewer /> },
       { path: "issues", element: <RepoIssuesPage /> },
+      { path: "issues/:issueId", element: <RepoIssueDetail /> },
+      { path: "pulls", element: <RepoPullRequestsPage /> },
     ]
   },
   {

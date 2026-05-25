@@ -20,6 +20,13 @@ export interface Repo {
   language: string;
   topics: string[];
 }
+export interface IssueComment {
+  id: string;
+  issueId: string;
+  authorId: string;
+  content: string;
+  createdAt: string;
+}
 export interface Issue {
   id: string;
   repoId: string;
@@ -33,7 +40,8 @@ export interface Issue {
 export const MOCK_USERS: User[] = [
   { id: 'octocat', name: 'The Octocat' },
   { id: 'forge-dev', name: 'Forge Developer' },
-  { id: 'jdoe', name: 'John Doe' }
+  { id: 'jdoe', name: 'John Doe' },
+  { id: 'alice', name: 'Alice Smith' }
 ];
 export const MOCK_REPOS: Repo[] = [
   {
@@ -59,6 +67,30 @@ export const MOCK_REPOS: Repo[] = [
     updatedAt: '2023-10-22T08:30:00Z',
     language: 'JavaScript',
     topics: ['shadcn', 'starter-kit']
+  },
+  {
+    id: 'r3',
+    name: 'durable-storage-lib',
+    owner: 'forge-dev',
+    description: 'Advanced patterns for Cloudflare Durable Objects and SQLite.',
+    stars: 892,
+    forks: 45,
+    visibility: 'public',
+    updatedAt: '2023-10-25T12:00:00Z',
+    language: 'TypeScript',
+    topics: ['cloudflare', 'durable-objects', 'database']
+  },
+  {
+    id: 'r4',
+    name: 'minimal-css',
+    owner: 'alice',
+    description: 'The smallest CSS framework you will ever need.',
+    stars: 3200,
+    forks: 156,
+    visibility: 'public',
+    updatedAt: '2023-10-25T15:45:00Z',
+    language: 'CSS',
+    topics: ['design', 'css', 'minimalism']
   }
 ];
 export const MOCK_ISSUES: Issue[] = [
@@ -83,6 +115,29 @@ export const MOCK_ISSUES: Issue[] = [
     labels: [{ name: 'bug', color: 'bg-red-100 text-red-700 border-red-200' }]
   }
 ];
+export const MOCK_COMMENTS: IssueComment[] = [
+  {
+    id: 'c1',
+    issueId: '1',
+    authorId: 'octocat',
+    content: "I've started working on the breadcrumb component. It should reflect the current URL splat.",
+    createdAt: '2023-10-21T10:00:00Z'
+  },
+  {
+    id: 'c2',
+    issueId: '1',
+    authorId: 'forge-dev',
+    content: "Great! Make sure to handle deep nesting. We need to be able to navigate into `src/components/ui` easily.",
+    createdAt: '2023-10-21T11:30:00Z'
+  },
+  {
+    id: 'c3',
+    issueId: '1',
+    authorId: 'alice',
+    content: "Don't forget to add a file search shortcut like GitHub's 't' key.",
+    createdAt: '2023-10-22T09:15:00Z'
+  }
+];
 export const MOCK_FILE_TREE: FileNode[] = [
   {
     name: 'src',
@@ -91,6 +146,17 @@ export const MOCK_FILE_TREE: FileNode[] = [
     lastCommitMessage: 'refactor: split layout components',
     lastCommitDate: '2 hours ago',
     children: [
+      { 
+        name: 'components', 
+        type: 'folder', 
+        path: 'src/components', 
+        lastCommitMessage: 'feat: add issue detail view', 
+        lastCommitDate: '3 hours ago',
+        children: [
+          { name: 'AppSidebar.tsx', type: 'file', path: 'src/components/AppSidebar.tsx', lastCommitMessage: 'initial sidebar', lastCommitDate: '5 days ago', content: 'export default function Sidebar() {}' },
+          { name: 'MarkdownViewer.tsx', type: 'file', path: 'src/components/MarkdownViewer.tsx', lastCommitMessage: 'feat: markdown rendering', lastCommitDate: '1 day ago', content: 'export function MarkdownViewer() {}' }
+        ]
+      },
       { name: 'App.tsx', type: 'file', path: 'src/App.tsx', lastCommitMessage: 'feat: add routing', lastCommitDate: '1 day ago', content: 'export default function App() { return <div>Forge</div> }' },
       { name: 'main.tsx', type: 'file', path: 'src/main.tsx', lastCommitMessage: 'initial commit', lastCommitDate: '5 days ago', content: 'import React from "react";' }
     ]

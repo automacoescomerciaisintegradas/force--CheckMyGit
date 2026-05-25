@@ -1,6 +1,6 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { CircleDot, Tag, Users, Milestone, Lock, Smile, MoreHorizontal } from 'lucide-react';
+import { useParams, Link } from 'react-router-dom';
+import { CircleDot, MessageSquare, Tag, Users, Milestone, Lock, Smile, MoreHorizontal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -25,7 +25,7 @@ export function RepoIssueDetail() {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap text-sm pb-6 border-b">
-          <Badge className={cn("rounded-full px-3 py-0.5 text-white border-none", issue.status === 'open' ? "bg-green-600" : "bg-red-600")}>
+          <Badge className={cn("rounded-full px-3 py-0.5", issue.status === 'open' ? "bg-green-600 hover:bg-green-700" : "bg-red-600")}>
             <CircleDot className="w-3 h-3 mr-1" /> {issue.status === 'open' ? 'Open' : 'Closed'}
           </Badge>
           <span className="font-bold text-muted-foreground">{issue.authorId}</span>
@@ -34,7 +34,9 @@ export function RepoIssueDetail() {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-9 space-y-8">
+          {/* Main Conversation */}
           <div className="space-y-8 relative before:absolute before:left-[19px] before:top-4 before:bottom-4 before:w-[2px] before:bg-muted">
+            {/* Opener */}
             <div className="flex gap-4 relative">
               <Avatar className="w-10 h-10 border z-10 bg-background">
                 <AvatarImage src={`https://github.com/${issue.authorId}.png`} />
@@ -55,6 +57,7 @@ export function RepoIssueDetail() {
                 </div>
               </div>
             </div>
+            {/* Comments */}
             {comments.map((comment) => (
               <div key={comment.id} className="flex gap-4 relative">
                 <Avatar className="w-10 h-10 border z-10 bg-background">
@@ -74,6 +77,7 @@ export function RepoIssueDetail() {
                 </div>
               </div>
             ))}
+            {/* Reply Area */}
             <div className="flex gap-4 relative">
               <Avatar className="w-10 h-10 border z-10 bg-background">
                 <AvatarImage src="https://github.com/forge-dev.png" />
@@ -85,7 +89,7 @@ export function RepoIssueDetail() {
                   <span className="text-muted-foreground hover:text-foreground cursor-pointer pb-2 -mb-2">Preview</span>
                 </div>
                 <div className="p-2">
-                  <textarea
+                  <textarea 
                     className="w-full min-h-[120px] p-2 bg-secondary/30 rounded border text-sm focus:outline-none focus:ring-1 focus:ring-ring"
                     placeholder="Leave a comment"
                   />
@@ -100,34 +104,35 @@ export function RepoIssueDetail() {
             </div>
           </div>
         </div>
+        {/* Sidebar */}
         <div className="lg:col-span-3 space-y-6">
           <div>
-            <h4 className="text-xs font-semibold text-muted-foreground flex items-center justify-between mb-2 uppercase tracking-wider">
+            <h4 className="text-xs font-semibold text-muted-foreground flex items-center justify-between mb-2">
               Assignees <Users className="w-3 h-3" />
             </h4>
             <div className="text-xs text-muted-foreground italic">No one assigned</div>
           </div>
           <Separator />
           <div>
-            <h4 className="text-xs font-semibold text-muted-foreground flex items-center justify-between mb-2 uppercase tracking-wider">
+            <h4 className="text-xs font-semibold text-muted-foreground flex items-center justify-between mb-2">
               Labels <Tag className="w-3 h-3" />
             </h4>
             <div className="flex flex-wrap gap-1">
               {issue.labels.map(l => (
-                <Badge key={l.name} variant="outline" className={cn("text-[10px] py-0 font-normal", l.color)}>{l.name}</Badge>
+                <Badge key={l.name} variant="outline" className={cn("text-[10px] py-0", l.color)}>{l.name}</Badge>
               ))}
             </div>
           </div>
           <Separator />
           <div>
-            <h4 className="text-xs font-semibold text-muted-foreground flex items-center justify-between mb-2 uppercase tracking-wider">
+            <h4 className="text-xs font-semibold text-muted-foreground flex items-center justify-between mb-2">
               Milestone <Milestone className="w-3 h-3" />
             </h4>
             <div className="text-xs text-muted-foreground italic">No milestone</div>
           </div>
           <Separator />
           <div className="text-xs text-muted-foreground space-y-2">
-            <div className="flex items-center gap-2 hover:text-blue-600 cursor-pointer transition-colors">
+            <div className="flex items-center gap-2 hover:text-blue-600 cursor-pointer">
               <Lock className="w-3 h-3" /> Lock conversation
             </div>
           </div>
