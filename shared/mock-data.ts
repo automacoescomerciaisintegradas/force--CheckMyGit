@@ -1,5 +1,5 @@
 import { User, Repository, Issue, PullRequest, ActivityEvent, ContributionDay, FileNode, IssueComment } from './types';
-import { subDays, format, startOfYear, eachDayOfInterval, subHours } from 'date-fns';
+import { subDays, format, eachDayOfInterval, subHours, subMinutes } from 'date-fns';
 export const MOCK_USERS: User[] = [
   {
     id: 'u1',
@@ -18,7 +18,7 @@ export const MOCK_USERS: User[] = [
     username: 'automacoescomerciais',
     name: 'Cleudocode Core',
     avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=cleudo',
-    bio: 'Developing Cleudocode: The AI that actually does things.',
+    bio: 'Developing Cleudocode: The AI that actually does things. Integrated commercial automation experts.',
     location: 'Remote',
     followers: 5800,
     following: 45,
@@ -36,7 +36,7 @@ export const MOCK_REPOSITORIES: Repository[] = [
     forks: 4100,
     language: 'TypeScript',
     visibility: 'public',
-    updatedAt: new Date().toISOString(),
+    updatedAt: subMinutes(new Date(), 45).toISOString(),
     topics: ['react', 'tailwind', 'cleudocode', 'ui'],
   },
   {
@@ -49,7 +49,7 @@ export const MOCK_REPOSITORIES: Repository[] = [
     forks: 180,
     language: 'TypeScript',
     visibility: 'public',
-    updatedAt: subDays(new Date(), 1).toISOString(),
+    updatedAt: subHours(new Date(), 2).toISOString(),
     topics: ['ai', 'automation', 'automation-comercial', 'typescript'],
   },
   {
@@ -62,7 +62,7 @@ export const MOCK_REPOSITORIES: Repository[] = [
     forks: 56,
     language: 'Python',
     visibility: 'public',
-    updatedAt: subDays(new Date(), 10).toISOString(),
+    updatedAt: subDays(new Date(), 2).toISOString(),
     topics: ['marketing', 'automation', 'python'],
   }
 ];
@@ -70,16 +70,18 @@ export const MOCK_FILE_NODES: Record<string, FileNode[]> = {
   'r2': [
     { id: 'f1', name: 'src', type: 'folder', path: 'src', lastCommitMsg: 'Implement core Cleudocode reasoning engine', lastCommitDate: subDays(new Date(), 1).toISOString() },
     { id: 'f2', name: 'automation', type: 'folder', path: 'automation', lastCommitMsg: 'Add WhatsApp integration hooks', lastCommitDate: subDays(new Date(), 2).toISOString() },
-    { id: 'f3', name: 'configs', type: 'folder', path: 'configs', lastCommitMsg: 'Optimize prompt templates', lastCommitDate: subDays(new Date(), 3).toISOString() },
     { id: 'f4', name: 'package.json', type: 'file', path: 'package.json', lastCommitMsg: 'Bump Cleudocode core dependencies', lastCommitDate: subDays(new Date(), 5).toISOString(), content: '{\n  "name": "cleudocode-ai",\n  "version": "2.1.0"\n}' },
-    { id: 'f5', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Update brand identity to Cleudocode', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Cleudocode AI\n\nThe AI that actually does things.' }
+    { id: 'f5', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Update brand identity to Cleudocode', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Cleudocode AI\n\nAdvanced reasoning for complex tasks.\n\n## Getting Started\n\n```bash\nbun install cleudocode\n```\n\n## Features\n\n- Task Orchestration\n- Multi-modal Context' }
+  ],
+  'r3': [
+    { id: 'r3f1', name: 'funnels', type: 'folder', path: 'funnels', lastCommitMsg: 'Add lead scoring algorithm', lastCommitDate: subDays(new Date(), 3).toISOString() },
+    { id: 'r3f2', name: 'scripts', type: 'folder', path: 'scripts', lastCommitMsg: 'Data migration utilities', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'r3f3', name: 'main.py', type: 'file', path: 'main.py', lastCommitMsg: 'Marketing engine entrypoint', lastCommitDate: subDays(new Date(), 1).toISOString(), content: 'print("Smart Marketing v1.0")' },
+    { id: 'r3f4', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Documentation for funnels', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Smart Marketing\n\nAI-powered funnels for modern businesses.' }
   ],
   'r2-src': [
     { id: 'f6', name: 'engine', type: 'folder', path: 'src/engine', lastCommitMsg: 'Improve context handling', lastCommitDate: subDays(new Date(), 1).toISOString() },
     { id: 'f7', name: 'main.ts', type: 'file', path: 'src/main.ts', lastCommitMsg: 'Bootstrapping Cleudocode', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Cleudocode Initialized");' }
-  ],
-  'r2-src-engine': [
-    { id: 'f8', name: 'processor.ts', type: 'file', path: 'src/engine/processor.ts', lastCommitMsg: 'Enhance task execution logic', lastCommitDate: subDays(new Date(), 1).toISOString(), content: 'export class CleudoProcessor { ... }' }
   ]
 };
 export const MOCK_ISSUES: Issue[] = [
@@ -106,6 +108,18 @@ export const MOCK_ISSUES: Issue[] = [
     createdAt: subDays(new Date(), 5).toISOString(),
     commentsCount: 1,
     description: 'Deep nested automation chains were hitting the context window limit.'
+  },
+  {
+    id: 'i3',
+    repoId: 'r3',
+    number: 1,
+    title: 'Optimize lead scoring latency',
+    authorId: 'u2',
+    status: 'open',
+    labels: ['performance'],
+    createdAt: subDays(new Date(), 1).toISOString(),
+    commentsCount: 0,
+    description: 'Lead scoring takes too long on high-volume days.'
   }
 ];
 export const MOCK_PRS: PullRequest[] = [
@@ -120,6 +134,18 @@ export const MOCK_PRS: PullRequest[] = [
     description: 'Switching all platform references to the new Cleudocode brand.',
     baseBranch: 'main',
     headBranch: 'feat/rebrand-cleudo'
+  },
+  {
+    id: 'p2',
+    repoId: 'r3',
+    number: 2,
+    title: 'Draft: New ML Pipeline for Attribution',
+    authorId: 'u2',
+    status: 'open',
+    createdAt: subHours(new Date(), 5).toISOString(),
+    description: 'Experimental attribution modeling.',
+    baseBranch: 'main',
+    headBranch: 'ml/attribution'
   }
 ];
 export const MOCK_COMMENTS: Record<string, IssueComment[]> = {
@@ -134,7 +160,7 @@ export const MOCK_ACTIVITY: ActivityEvent[] = [
     type: 'push',
     userUsername: 'automacoescomerciais',
     repoName: 'cleudocode-ai',
-    timestamp: new Date().toISOString(),
+    timestamp: subMinutes(new Date(), 15).toISOString(),
     payload: { branch: 'main', commits: 5 }
   },
   {
@@ -142,7 +168,15 @@ export const MOCK_ACTIVITY: ActivityEvent[] = [
     type: 'star',
     userUsername: 'shadcn',
     repoName: 'cleudocode-ai',
-    timestamp: subDays(new Date(), 1).toISOString(),
+    timestamp: subHours(new Date(), 3).toISOString(),
+  },
+  {
+    id: 'e3',
+    type: 'push',
+    userUsername: 'automacoescomerciais',
+    repoName: 'smart-marketing',
+    timestamp: subHours(new Date(), 8).toISOString(),
+    payload: { branch: 'main', commits: 2 }
   }
 ];
 export const generateContributionData = (): ContributionDay[] => {

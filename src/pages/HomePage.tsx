@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Star, GitFork, BookOpen, TrendingUp, Clock, ArrowRight, Zap, Sparkles, Terminal } from 'lucide-react';
+import { Star, GitFork, BookOpen, Clock, ArrowRight, Zap, Sparkles, Terminal } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,13 +9,16 @@ import { Button } from '@/components/ui/button';
 import { MOCK_REPOSITORIES, MOCK_ACTIVITY } from '@shared/mock-data';
 import { formatDistanceToNow } from 'date-fns';
 export function HomePage() {
+  const scrollToFeatured = () => {
+    document.getElementById('featured-projects')?.scrollIntoView({ behavior: 'smooth' });
+  };
   return (
     <AppLayout>
       {/* High-Impact Hero Section */}
       <section className="relative overflow-hidden border-b bg-muted/10">
         <div className="absolute inset-0 bg-gradient-mesh opacity-10 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center space-y-8 max-w-4xl mx-auto"
@@ -33,10 +36,19 @@ export function HomePage() {
               Bem-vindo(a) ao Futuro da Criação de Conteúdo! 🤖✨
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Button size="lg" className="h-14 px-8 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 hover:shadow-glow-lg hover:scale-105 transition-all w-full sm:w-auto">
-                Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
+              <Button 
+                size="lg" 
+                asChild
+                className="h-14 px-8 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 hover:shadow-glow-lg hover:scale-105 transition-all w-full sm:w-auto cursor-pointer"
+              >
+                <Link to="/automacoescomerciais">Get Started Now <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
-              <Button variant="outline" size="lg" className="h-14 px-8 text-lg font-bold rounded-2xl border-2 w-full sm:w-auto">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                onClick={scrollToFeatured}
+                className="h-14 px-8 text-lg font-bold rounded-2xl border-2 w-full sm:w-auto hover:bg-muted transition-colors cursor-pointer"
+              >
                 Explore Repositories
               </Button>
             </div>
@@ -47,7 +59,7 @@ export function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Feed */}
           <div className="lg:col-span-2 space-y-10">
-            <section>
+            <section id="featured-projects">
               <div className="flex items-center justify-between mb-8">
                 <div className="space-y-1">
                   <h2 className="text-3xl font-bold tracking-tight flex items-center gap-3">
@@ -66,7 +78,7 @@ export function HomePage() {
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
                   >
-                    <Card className="hover:border-primary/50 transition-all hover:shadow-soft bg-card/40 backdrop-blur-sm group rounded-2xl overflow-hidden border-border/50">
+                    <Card className="hover:border-primary/50 transition-all hover:shadow-soft bg-card group rounded-2xl overflow-hidden border-border/50">
                       <CardHeader className="pb-4">
                         <div className="flex items-start justify-between">
                           <div className="space-y-1.5">
@@ -99,7 +111,7 @@ export function HomePage() {
                             <GitFork className="h-4 w-4" />
                             <span>{repo.forks.toLocaleString()}</span>
                           </div>
-                          <div className="ml-auto hidden sm:block text-xs font-medium bg-muted/50 px-3 py-1 rounded-full">
+                          <div className="ml-auto hidden sm:block text-xs font-medium bg-muted px-3 py-1 rounded-full">
                             Updated {formatDistanceToNow(new Date(repo.updatedAt))} ago
                           </div>
                         </div>

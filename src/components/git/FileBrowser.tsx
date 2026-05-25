@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Folder, FileCode, ChevronRight, Clock } from 'lucide-react';
+import { Folder, FileCode, ChevronRight, Clock, Book } from 'lucide-react';
 import { MOCK_FILE_NODES } from '@shared/mock-data';
 import { formatDistanceToNow } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { MarkdownViewer } from '@/components/MarkdownViewer';
 interface FileBrowserProps {
   repoId: string;
 }
@@ -12,9 +13,11 @@ export function FileBrowser({ repoId }: FileBrowserProps) {
   const currentPath = splat || '';
   // Breadcrumb calculation
   const pathSegments = currentPath.split('/').filter(Boolean);
-  // Simple logic to fetch nodes based on path for mock purposes
+  // Logic to fetch nodes based on path
   const key = currentPath === '' ? repoId : `${repoId}-${currentPath.replace(/\//g, '-')}`;
-  const nodes = MOCK_FILE_NODES[key] || MOCK_FILE_NODES[repoId] || [];
+  const nodes = MOCK_FILE_NODES[key] || [];
+  // Find README if it exists in the current nodes
+  const readmeFile = nodes.find(n => n.name.toLowerCase() === 'readme.md' && n.type === 'file');
   return (
     <div className="space-y-6">
       {/* Interactive Breadcrumbs */}
@@ -41,18 +44,18 @@ export function FileBrowser({ repoId }: FileBrowserProps) {
         <div className="bg-muted/50 p-4 flex items-center justify-between border-b">
           <div className="flex items-center gap-2 text-sm font-medium">
             <Avatar className="h-6 w-6 border shadow-sm">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarImage src="https://api.dicebear.com/7.x/bottts/svg?seed=cleudo" />
+              <AvatarFallback>CC</AvatarFallback>
             </Avatar>
-            <span>Latest commit by <strong>madeinlowcode</strong></span>
+            <span>Latest commit by <strong className="text-primary hover:underline cursor-pointer">automacoescomerciais</strong></span>
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="hidden sm:inline">Refactor file navigation system</span>
-            <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> 2 days ago</span>
+            <span className="hidden sm:inline">Refactor system for Cleudocode Core v3</span>
+            <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> 1 day ago</span>
           </div>
         </div>
         <div className="divide-y">
-          {nodes.map((node) => (
+          {nodes.length > 0 ? nodes.map((node) => (
             <div key={node.id} className="flex items-center justify-between p-3 px-4 hover:bg-muted/30 transition-colors group">
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 {node.type === 'folder' ? (
@@ -72,22 +75,21 @@ export function FileBrowser({ repoId }: FileBrowserProps) {
                 <span className="w-24 text-right">{formatDistanceToNow(new Date(node.lastCommitDate))} ago</span>
               </div>
             </div>
-          ))}
+          )) : (
+            <div className="p-8 text-center text-sm text-muted-foreground">
+              No files found in this directory.
+            </div>
+          )}
         </div>
       </div>
-      {currentPath === '' && (
-        <div className="border rounded-xl p-8 bg-card shadow-sm prose prose-sm dark:prose-invert max-w-none">
-          <h1 className="text-2xl font-bold border-b pb-4 mb-6">README.md</h1>
-          <p className="text-muted-foreground text-base leading-relaxed">
-            Welcome to the Forge repository. This is a minimalist Git platform built for modern development workflows.
-          </p>
-          <div className="mt-8 space-y-4">
-            <h2 className="text-lg font-semibold">Features</h2>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>Ultra-fast file navigation</li>
-              <li>Professional syntax highlighting</li>
-              <li>Collaborative issue tracking</li>
-            </ul>
+      {readmeFile && (
+        <div id="readme" className="border rounded-xl bg-card shadow-sm overflow-hidden">
+          <div className="bg-muted/30 px-4 py-2 border-b flex items-center gap-2">
+            <Book className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs font-bold uppercase tracking-wider">{readmeFile.name}</span>
+          </div>
+          <div className="p-8 prose prose-sm dark:prose-invert max-w-none">
+            <MarkdownViewer content={readmeFile.content || "# README\nContent not available."} />
           </div>
         </div>
       )}
