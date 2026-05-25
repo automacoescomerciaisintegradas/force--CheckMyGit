@@ -77,7 +77,10 @@ function updateWranglerJsonc() {
 }
 
 function runSetupCommands() {
-    const commands = [];
+    const commands = [
+    "bun add react-markdown@^9.0.3",
+    "bun add react-syntax-highlighter@^15.6.1"
+];
     
     if (commands.length === 0) {
         console.log('⊘ No setup commands to run');
