@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MapPin, Link as LinkIcon, Calendar, Users, Star, GitFork, BookOpen } from 'lucide-react';
+import { MapPin, Link as LinkIcon, Calendar, Users, Star, GitFork, BookOpen, Search } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
 import { MOCK_USERS, MOCK_REPOSITORIES } from '@shared/mock-data';
 import { ContributionGrid } from '@/components/git/ContributionGrid';
+import { formatDistanceToNow } from 'date-fns';
 export function ProfilePage() {
   const { username } = useParams();
+  const [searchQuery, setSearchQuery] = useState('');
   const user = MOCK_USERS.find(u => u.username === username) || MOCK_USERS[0];
   const userRepos = MOCK_REPOSITORIES.filter(r => r.ownerUsername === user.username);
+  const filteredRepos = userRepos.filter(r => 
+    r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    r.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <AppLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* User Bio Sidebar */}
           <div className="md:col-span-1 space-y-6">
             <div className="space-y-4">
               <Avatar className="w-full h-auto aspect-square border-4 border-background shadow-sm rounded-3xl">
@@ -58,7 +64,6 @@ export function ProfilePage() {
               </div>
             </div>
           </div>
-          {/* Main Content Area */}
           <div className="md:col-span-3">
             <Tabs defaultValue="overview" className="space-y-6">
               <TabsList className="bg-transparent border-b w-full justify-start rounded-none h-auto p-0 gap-8 overflow-x-auto scrollbar-hide">
@@ -73,7 +78,7 @@ export function ProfilePage() {
                 <section>
                   <h3 className="text-base font-semibold mb-4">Pinned</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {userRepos.map(repo => (
+                    {userRepos.slice(0, 4).map(repo => (
                       <Card key={repo.id} className="hover:border-primary/30 transition-all bg-card/40">
                         <CardHeader className="pb-2">
                           <CardTitle className="text-sm font-bold flex items-center gap-2">
@@ -114,9 +119,53 @@ export function ProfilePage() {
                   <ContributionGrid />
                 </section>
               </TabsContent>
-              <TabsContent value="repositories">
-                <div className="space-y-4 py-4">
-                  <p className="text-muted-foreground text-sm">Repository listing coming soon in Phase 9...</p>
+              <TabsContent value="repositories" className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
+                <div className="flex items-center gap-2 pb-2 border-b">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input 
+                      placeholder="Find a repository..." 
+                      className="pl-9 bg-muted/20" 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <Button variant="outline" size="sm">Type</Button>
+                  <Button variant="outline" size="sm">Language</Button>
+                </div>
+                <div className="divide-y">
+                  {filteredRepos.map(repo => (
+                    <div key={repo.id} className="py-6 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Link to={`/${user.username}/${repo.name}`} className="text-xl font-bold text-primary hover:underline">
+                          {repo.name}
+                        </Link>
+                        <Badge variant="outline" className="text-[10px] py-0 capitalize">{repo.visibility}</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground max-w-2xl">{repo.description}</p>
+                      <div className="flex items-center gap-6 text-xs text-muted-foreground pt-2">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-3 h-3 rounded-full bg-blue-500" />
+                          <span>{repo.language}</span>
+                        </div>
+                        <div className="flex items-center gap-1 hover:text-foreground cursor-pointer">
+                          <Star className="h-3.5 w-3.5" />
+                          <span>{repo.stars}</span>
+                        </div>
+                        <div className="flex items-center gap-1 hover:text-foreground cursor-pointer">
+                          <GitFork className="h-3.5 w-3.5" />
+                          <span>{repo.forks}</span>
+                        </div>
+                        <div>Updated {formatDistanceToNow(new Date(repo.updatedAt))} ago</div>
+                      </div>
+                    </div>
+                  ))}
+                  {filteredRepos.length === 0 && (
+                    <div className="py-12 text-center space-y-2">
+                      <h3 className="font-semibold">No repositories found</h3>
+                      <p className="text-sm text-muted-foreground">Try adjusting your filters or search query.</p>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>

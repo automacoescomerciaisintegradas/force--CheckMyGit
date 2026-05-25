@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { CircleDot, CheckCircle2, MessageSquare, Plus } from 'lucide-react';
 import { MOCK_ISSUES } from '@shared/mock-data';
 import { Button } from '@/components/ui/button';
@@ -9,13 +10,14 @@ interface IssueListProps {
   repoId: string;
 }
 export function IssueList({ repoId }: IssueListProps) {
+  const { username, reponame } = useParams();
   const [filter, setFilter] = useState<'open' | 'closed'>('open');
   const issues = MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === filter);
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button 
+          <button
             onClick={() => setFilter('open')}
             className={cn(
               "flex items-center gap-1.5 text-sm font-medium transition-colors",
@@ -25,7 +27,7 @@ export function IssueList({ repoId }: IssueListProps) {
             <CircleDot className={cn("h-4 w-4", filter === 'open' && "text-green-500")} />
             {MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'open').length} Open
           </button>
-          <button 
+          <button
             onClick={() => setFilter('closed')}
             className={cn(
               "flex items-center gap-1.5 text-sm font-medium transition-colors",
@@ -50,13 +52,16 @@ export function IssueList({ repoId }: IssueListProps) {
         ) : (
           <div className="divide-y">
             {issues.map((issue) => (
-              <div key={issue.id} className="p-4 hover:bg-muted/30 transition-colors flex gap-4">
+              <div key={issue.id} className="p-4 hover:bg-muted/30 transition-colors flex gap-4 group">
                 <CircleDot className={cn("h-5 w-5 mt-0.5 flex-shrink-0", issue.status === 'open' ? "text-green-500" : "text-purple-500")} />
                 <div className="space-y-1 flex-1 min-w-0">
                   <div className="flex items-start gap-2 flex-wrap">
-                    <a href="#" className="font-bold text-base hover:text-primary transition-colors leading-tight">
+                    <Link 
+                      to={`/${username}/${reponame}/issues/${issue.number}`} 
+                      className="font-bold text-base hover:text-primary transition-colors leading-tight"
+                    >
                       {issue.title}
-                    </a>
+                    </Link>
                     <div className="flex gap-1">
                       {issue.labels.map(label => (
                         <Badge key={label} variant="outline" className="text-[10px] py-0 border-primary/20 bg-primary/5 text-primary">
@@ -70,7 +75,7 @@ export function IssueList({ repoId }: IssueListProps) {
                   </div>
                 </div>
                 {issue.commentsCount > 0 && (
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary cursor-pointer">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-primary transition-colors">
                     <MessageSquare className="h-3.5 w-3.5" />
                     <span>{issue.commentsCount}</span>
                   </div>

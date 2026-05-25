@@ -12,30 +12,33 @@ import {
   Settings,
   BookOpen,
   Eye,
-  ChevronRight,
-  FileText,
-  Folder
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { MOCK_REPOSITORIES } from '@shared/mock-data';
 import { FileBrowser } from '@/components/git/FileBrowser';
 import { CodeViewer } from '@/components/git/CodeViewer';
 import { IssueList } from '@/components/git/IssueList';
 import { PullRequestList } from '@/components/git/PullRequestList';
+import { IssueDetailPage } from '@/pages/IssueDetailPage';
+import { PullRequestDetailPage } from '@/pages/PullRequestDetailPage';
 export function RepositoryPage() {
   const { username, reponame } = useParams();
   const location = useLocation();
   const repo = MOCK_REPOSITORIES.find(r => r.name === reponame && r.ownerUsername === username) || MOCK_REPOSITORIES[0];
   const pathParts = location.pathname.split('/');
-  const currentView = pathParts[3] || 'code';
+  let currentView = 'code';
+  if (pathParts.includes('issues')) currentView = 'issues';
+  else if (pathParts.includes('pulls')) currentView = 'pulls';
+  else if (pathParts.includes('settings')) currentView = 'settings';
+  else if (pathParts.includes('actions')) currentView = 'actions';
+  else if (pathParts.includes('security')) currentView = 'security';
   return (
     <AppLayout>
       <div className="bg-muted/30 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-2 flex-wrap">
               <BookOpen className="h-5 w-5 text-muted-foreground" />
@@ -88,13 +91,13 @@ export function RepositoryPage() {
                     <GitPullRequest className="h-4 w-4" /> Pull Requests <Badge variant="secondary" className="px-1.5 py-0 ml-1 bg-muted/60">3</Badge>
                   </Link>
                 </TabsTrigger>
-                <TabsTrigger value="actions" className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
+                <TabsTrigger value="actions" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
                   <Play className="h-4 w-4" /> Actions
                 </TabsTrigger>
-                <TabsTrigger value="security" className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
+                <TabsTrigger value="security" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
                   <ShieldAlert className="h-4 w-4" /> Security
                 </TabsTrigger>
-                <TabsTrigger value="settings" className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
+                <TabsTrigger value="settings" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
                   <Settings className="h-4 w-4" /> Settings
                 </TabsTrigger>
               </TabsList>
@@ -102,13 +105,15 @@ export function RepositoryPage() {
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Routes>
           <Route index element={<FileBrowser repoId={repo.id} />} />
           <Route path="tree/:branch/*" element={<FileBrowser repoId={repo.id} />} />
           <Route path="blob/:branch/*" element={<CodeViewer repoId={repo.id} />} />
           <Route path="issues" element={<IssueList repoId={repo.id} />} />
+          <Route path="issues/:number" element={<IssueDetailPage repoId={repo.id} />} />
           <Route path="pulls" element={<PullRequestList repoId={repo.id} />} />
+          <Route path="pulls/:number" element={<PullRequestDetailPage repoId={repo.id} />} />
         </Routes>
       </div>
     </AppLayout>

@@ -3,7 +3,7 @@ export interface ApiResponse<T = unknown> {
   data?: T;
   error?: string;
 }
-export type Visibility = 'public' | 'private';
+export type Visibility = 'public' | 'primary' | 'private';
 export type IssueStatus = 'open' | 'closed';
 export type PRStatus = 'open' | 'closed' | 'merged';
 export interface User {
@@ -31,6 +31,13 @@ export interface Repository {
   updatedAt: string;
   topics: string[];
 }
+export interface IssueComment {
+  id: string;
+  authorId: string;
+  body: string;
+  createdAt: string;
+  reactions?: Record<string, number>;
+}
 export interface Issue {
   id: string;
   repoId: string;
@@ -41,6 +48,7 @@ export interface Issue {
   labels: string[];
   createdAt: string;
   commentsCount: number;
+  description?: string;
 }
 export interface PullRequest {
   id: string;
@@ -51,6 +59,9 @@ export interface PullRequest {
   status: PRStatus;
   createdAt: string;
   mergedAt?: string;
+  description?: string;
+  baseBranch?: string;
+  headBranch?: string;
 }
 export interface ContributionDay {
   date: string;
@@ -64,4 +75,13 @@ export interface ActivityEvent {
   repoName: string;
   timestamp: string;
   payload?: any;
+}
+export interface FileNode {
+  id: string;
+  name: string;
+  type: 'file' | 'folder';
+  path: string;
+  lastCommitMsg: string;
+  lastCommitDate: string;
+  content?: string;
 }

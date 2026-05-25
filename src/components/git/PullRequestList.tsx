@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { GitPullRequest, GitMerge, CheckCircle2, Plus } from 'lucide-react';
 import { MOCK_PRS } from '@shared/mock-data';
 import { Button } from '@/components/ui/button';
@@ -8,13 +9,14 @@ interface PRListProps {
   repoId: string;
 }
 export function PullRequestList({ repoId }: PRListProps) {
+  const { username, reponame } = useParams();
   const [filter, setFilter] = useState<'open' | 'merged'>('open');
   const prs = MOCK_PRS.filter(p => p.repoId === repoId && (filter === 'open' ? p.status === 'open' : p.status === 'merged'));
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button 
+          <button
             onClick={() => setFilter('open')}
             className={cn(
               "flex items-center gap-1.5 text-sm font-medium transition-colors",
@@ -24,7 +26,7 @@ export function PullRequestList({ repoId }: PRListProps) {
             <GitPullRequest className={cn("h-4 w-4", filter === 'open' && "text-green-500")} />
             {MOCK_PRS.filter(p => p.repoId === repoId && p.status === 'open').length} Open
           </button>
-          <button 
+          <button
             onClick={() => setFilter('merged')}
             className={cn(
               "flex items-center gap-1.5 text-sm font-medium transition-colors",
@@ -57,9 +59,12 @@ export function PullRequestList({ repoId }: PRListProps) {
                 )}
                 <div className="space-y-1 flex-1 min-w-0">
                   <div className="flex items-start gap-2">
-                    <a href="#" className="font-bold text-base hover:text-primary transition-colors leading-tight">
+                    <Link 
+                      to={`/${username}/${reponame}/pulls/${pr.number}`} 
+                      className="font-bold text-base hover:text-primary transition-colors leading-tight"
+                    >
                       {pr.title}
-                    </a>
+                    </Link>
                   </div>
                   <div className="text-xs text-muted-foreground">
                     #{pr.number} {pr.status === 'merged' ? 'merged' : 'opened'} {formatDistanceToNow(new Date(pr.mergedAt || pr.createdAt))} ago by <strong>madeinlowcode</strong>

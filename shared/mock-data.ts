@@ -1,5 +1,5 @@
-import { User, Repository, Issue, PullRequest, ActivityEvent, ContributionDay, FileNode } from './types';
-import { subDays, format, startOfYear, eachDayOfInterval } from 'date-fns';
+import { User, Repository, Issue, PullRequest, ActivityEvent, ContributionDay, FileNode, IssueComment } from './types';
+import { subDays, format, startOfYear, eachDayOfInterval, subHours } from 'date-fns';
 export const MOCK_USERS: User[] = [
   {
     id: 'u1',
@@ -51,6 +51,19 @@ export const MOCK_REPOSITORIES: Repository[] = [
     visibility: 'public',
     updatedAt: subDays(new Date(), 2).toISOString(),
     topics: ['git', 'minimalist', 'react', 'cloudflare'],
+  },
+  {
+    id: 'r3',
+    ownerId: 'u2',
+    ownerUsername: 'madeinlowcode',
+    name: 'neon-styles',
+    description: 'A dark-mode first CSS utility library for cyberpunk aesthetics.',
+    stars: 120,
+    forks: 12,
+    language: 'CSS',
+    visibility: 'public',
+    updatedAt: subDays(new Date(), 10).toISOString(),
+    topics: ['css', 'cyberpunk', 'ui'],
   }
 ];
 export const MOCK_FILE_NODES: Record<string, FileNode[]> = {
@@ -77,6 +90,7 @@ export const MOCK_ISSUES: Issue[] = [
     labels: ['feature', 'high-priority'],
     createdAt: subDays(new Date(), 2).toISOString(),
     commentsCount: 3,
+    description: 'We need a file browser that can navigate nested directories using React Router splat routes.'
   },
   {
     id: 'i2',
@@ -87,7 +101,8 @@ export const MOCK_ISSUES: Issue[] = [
     status: 'closed',
     labels: ['bug'],
     createdAt: subDays(new Date(), 5).toISOString(),
-    commentsCount: 0,
+    commentsCount: 1,
+    description: 'The grid overflows on small screens. Needs a horizontal scroll area.'
   }
 ];
 export const MOCK_PRS: PullRequest[] = [
@@ -99,6 +114,9 @@ export const MOCK_PRS: PullRequest[] = [
     authorId: 'u2',
     status: 'open',
     createdAt: subDays(new Date(), 1).toISOString(),
+    description: 'Integrated `react-syntax-highlighter` for better code reading experience.',
+    baseBranch: 'main',
+    headBranch: 'feat/syntax-high'
   },
   {
     id: 'p2',
@@ -109,8 +127,24 @@ export const MOCK_PRS: PullRequest[] = [
     status: 'merged',
     createdAt: subDays(new Date(), 7).toISOString(),
     mergedAt: subDays(new Date(), 6).toISOString(),
+    description: 'Initial backend setup using Hono and Durable Objects.',
+    baseBranch: 'main',
+    headBranch: 'infra/worker-setup'
   }
 ];
+export const MOCK_COMMENTS: Record<string, IssueComment[]> = {
+  'i1': [
+    { id: 'c1', authorId: 'u1', body: 'I can help with the routing logic. Should we use `*` or a custom regex?', createdAt: subDays(new Date(), 1).toISOString() },
+    { id: 'c2', authorId: 'u2', body: 'Let’s go with `*` for simplicity. React Router 6 handles it well.', createdAt: subHours(new Date(), 12).toISOString() },
+    { id: 'c3', authorId: 'u1', body: 'Sounds good. I’ll open a draft PR shortly.', createdAt: subHours(new Date(), 2).toISOString() }
+  ],
+  'i2': [
+    { id: 'c4', authorId: 'u2', body: 'Fixed this by wrapping the grid in a `ScrollArea` component.', createdAt: subDays(new Date(), 4).toISOString() }
+  ],
+  'p1': [
+    { id: 'c5', authorId: 'u1', body: 'The bundle size might increase. Have we checked the impact?', createdAt: subHours(new Date(), 5).toISOString() }
+  ]
+};
 export const MOCK_ACTIVITY: ActivityEvent[] = [
   {
     id: 'e1',
