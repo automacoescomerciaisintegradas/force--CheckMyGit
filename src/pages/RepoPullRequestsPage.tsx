@@ -60,7 +60,11 @@ export function RepoPullRequestsPage() {
                 </div>
               </div>
               <div className="flex items-center gap-4 text-muted-foreground">
-                {pr.checks === 'pass' && <CheckCircle2 className="w-4 h-4 text-green-600" title="All checks passed" />}
+                {pr.checks === 'pass' && (
+                  <span title="All checks passed">
+                    <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  </span>
+                )}
                 {pr.comments > 0 && (
                   <div className="flex items-center gap-1 text-xs">
                     <MessageSquare className="w-3.5 h-3.5" /> {pr.comments}

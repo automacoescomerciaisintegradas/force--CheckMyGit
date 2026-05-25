@@ -22,6 +22,7 @@ import { RepoIssueDetail } from '@/pages/RepoIssueDetail'
 import { RepoPullRequestsPage } from '@/pages/RepoPullRequestsPage'
 import { ExplorePage } from '@/pages/ExplorePage'
 import { GlobalIssuesPage } from '@/pages/GlobalIssuesPage'
+import { RepoActionsPage } from '@/pages/RepoActionsPage'
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
       { path: "issues", element: <RepoIssuesPage /> },
       { path: "issues/:issueId", element: <RepoIssueDetail /> },
       { path: "pulls", element: <RepoPullRequestsPage /> },
+      { path: "actions", element: <RepoActionsPage /> },
     ]
   },
   {
