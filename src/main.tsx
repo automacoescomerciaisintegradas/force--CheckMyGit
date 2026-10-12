@@ -17,6 +17,12 @@ import { ProfilePage } from '@/pages/ProfilePage'
 import { RepositoryPage } from '@/pages/RepositoryPage'
 import { GlobalIssuesPage } from '@/pages/GlobalIssuesPage'
 import { GlobalPullRequestsPage } from '@/pages/GlobalPullRequestsPage'
+import { FileBrowser } from '@/components/git/FileBrowser'
+import { CodeViewer } from '@/components/git/CodeViewer'
+import { IssueList } from '@/components/git/IssueList'
+import { IssueDetailPage } from '@/pages/IssueDetailPage'
+import { PullRequestList } from '@/components/git/PullRequestList'
+import { PullRequestDetailPage } from '@/pages/PullRequestDetailPage'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -47,9 +53,18 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
   },
   {
-    path: "/:username/:reponame/*",
+    path: "/:username/:reponame",
     element: <RepositoryPage />,
     errorElement: <RouteErrorBoundary />,
+    children: [
+      { index: true, element: <FileBrowser repoId="" /> },
+      { path: "tree/:branch/*", element: <FileBrowser repoId="" /> },
+      { path: "blob/:branch/*", element: <CodeViewer repoId="" /> },
+      { path: "issues", element: <IssueList /> },
+      { path: "issues/:number", element: <IssueDetailPage repoId="" /> },
+      { path: "pulls", element: <PullRequestList /> },
+      { path: "pulls/:number", element: <PullRequestDetailPage repoId="" /> },
+    ]
   },
   {
     path: "*",

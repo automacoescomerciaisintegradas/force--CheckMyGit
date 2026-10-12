@@ -1,78 +1,61 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { CircleDot, CheckCircle2, ChevronLeft, MoreHorizontal, Smile } from 'lucide-react';
+import { CircleDot, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { MOCK_ISSUES, MOCK_COMMENTS, MOCK_USERS } from '@shared/mock-data';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { CommentThread } from '@/components/git/CommentThread';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-export function IssueDetailPage({ repoId }: { repoId: string }) {
+export function IssueDetailPage({ repoId: propRepoId }: { repoId?: string }) {
   const { number, username, reponame } = useParams();
+  const repoId = propRepoId || 'r2';
   const issue = MOCK_ISSUES.find(i => i.repoId === repoId && i.number === parseInt(number || '0'));
   const comments = MOCK_COMMENTS[issue?.id || ''] || [];
   const author = MOCK_USERS.find(u => u.id === issue?.authorId);
-  if (!issue) return <div className="py-12 text-center">Problema não encontrado</div>;
+  if (!issue) return <div className="py-20 text-center text-zinc-400 font-bold uppercase tracking-widest">Problema não encontrado</div>;
   return (
-    <div className="space-y-6">
-      <div className="space-y-4 pb-6 border-b">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Button variant="ghost" size="sm" asChild className="-ml-2 h-8">
-            <Link to={`/${username}/${reponame}/issues`}>
-              <ChevronLeft className="h-4 w-4 mr-1" /> Voltar para Problemas
-            </Link>
-          </Button>
-        </div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <h1 className="text-3xl font-semibold tracking-tight">
-            {issue.title} <span className="text-muted-foreground font-light">#{issue.number}</span>
+    <div className="max-w-5xl mx-auto space-y-12">
+      <div className="space-y-6 pb-10 border-b border-zinc-100">
+        <Link to={`/${username}/${reponame}/issues`} className="inline-flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest hover:text-zinc-900 transition-colors">
+          <ChevronLeft className="h-4 w-4" /> Voltar
+        </Link>
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
+            {issue.title} <span className="text-zinc-300 font-light">#{issue.number}</span>
           </h1>
-          <div className="flex items-center gap-2">
-            <Button size="sm" variant="outline" className="hidden sm:flex">Editar</Button>
-            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">Novo Problema</Button>
-          </div>
+          <Button size="sm" className="bg-zinc-900 text-white rounded-xl h-10 px-6 font-bold">Novo Problema</Button>
         </div>
-        <div className="flex items-center gap-3">
-          <Badge className={issue.status === 'open' ? "bg-green-600 hover:bg-green-600" : "bg-purple-600 hover:bg-purple-600"}>
-            {issue.status === 'open' ? <CircleDot className="w-3 h-3 mr-1" /> : <CheckCircle2 className="w-3 h-3 mr-1" />}
+        <div className="flex items-center gap-4 flex-wrap">
+          <Badge className={`rounded-xl px-4 py-1 font-bold uppercase tracking-widest text-[10px] border-0 shadow-none ${issue.status === 'open' ? "bg-green-500/10 text-green-600" : "bg-purple-500/10 text-purple-600"}`}>
+            {issue.status === 'open' ? <CircleDot className="w-3 h-3 mr-2" /> : <CheckCircle2 className="w-3 h-3 mr-2" />}
             {issue.status === 'open' ? 'Aberto' : 'Fechado'}
           </Badge>
-          <p className="text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">{author?.username}</span> abriu este problema há {formatDistanceToNow(new Date(issue.createdAt), { locale: ptBR })} · {issue.commentsCount} comentários
+          <p className="text-[13px] font-medium text-zinc-400">
+            <span className="text-zinc-900 font-bold">{author?.username}</span> abriu há {formatDistanceToNow(new Date(issue.createdAt), { locale: ptBR })} • {issue.commentsCount} comentários
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-16">
         <div className="lg:col-span-3">
           <CommentThread originalPost={issue.description} authorId={issue.authorId} createdAt={issue.createdAt} comments={comments} />
         </div>
-        <aside className="space-y-6">
-          <div className="space-y-2">
-            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Responsáveis</h4>
-            <p className="text-sm text-muted-foreground italic">Ninguém atribuído</p>
+        <aside className="space-y-8">
+          <div className="space-y-3">
+            <h4 className="text-[10px] font-bold text-zinc-300 uppercase tracking-[0.2em]">Responsáveis</h4>
+            <p className="text-xs text-zinc-400 font-medium">Ninguém atribuído</p>
           </div>
-          <Separator />
-          <div className="space-y-2">
-            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Rótulos</h4>
-            <div className="flex flex-wrap gap-1">
+          <Separator className="bg-zinc-50" />
+          <div className="space-y-4">
+            <h4 className="text-[10px] font-bold text-zinc-300 uppercase tracking-[0.2em]">Rótulos</h4>
+            <div className="flex flex-wrap gap-1.5">
               {issue.labels.length > 0 ? issue.labels.map(l => (
-                <Badge key={l} variant="outline" className="bg-primary/5 text-primary border-primary/20">{l}</Badge>
+                <Badge key={l} variant="outline" className="text-[10px] font-bold uppercase border-zinc-100 bg-zinc-50/50 text-zinc-400">{l}</Badge>
               )) : (
-                <p className="text-sm text-muted-foreground italic">Nenhum ainda</p>
+                <p className="text-xs text-zinc-400 font-medium">Nenhum</p>
               )}
             </div>
-          </div>
-          <Separator />
-          <div className="space-y-2">
-            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Projetos</h4>
-            <p className="text-sm text-muted-foreground italic">Nenhum ainda</p>
-          </div>
-          <Separator />
-          <div className="space-y-2">
-            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Marco</h4>
-            <p className="text-sm text-muted-foreground italic">Sem marcos</p>
           </div>
         </aside>
       </div>

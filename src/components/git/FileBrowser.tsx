@@ -9,31 +9,29 @@ import { MarkdownViewer } from '@/components/MarkdownViewer';
 interface FileBrowserProps {
   repoId: string;
 }
-export function FileBrowser({ repoId }: FileBrowserProps) {
+export function FileBrowser({ repoId: propRepoId }: FileBrowserProps) {
   const { username, reponame, '*': splat } = useParams();
+  // Se repoId não veio via props, tentamos derivar (no novo sistema de rotas context pode ser usado)
+  const repoId = propRepoId || 'r2'; // Fallback seguro para demonstração
   const currentPath = splat || '';
-  // Cálculo de breadcrumb
   const pathSegments = currentPath.split('/').filter(Boolean);
-  // Lógica para buscar nós com base no caminho
   const key = currentPath === '' ? repoId : `${repoId}-${currentPath.replace(/\//g, '-')}`;
   const nodes = MOCK_FILE_NODES[key] || [];
-  // Encontrar README se existir nos nós atuais
   const readmeFile = nodes.find(n => n.name.toLowerCase() === 'readme.md' && n.type === 'file');
   return (
-    <div className="space-y-6">
-      {/* Breadcrumbs Interativos */}
-      <nav className="flex items-center space-x-1 text-sm font-medium text-muted-foreground">
-        <Link to={`/${username}/${reponame}`} className="hover:text-primary transition-colors">
+    <div className="space-y-10">
+      <nav className="flex items-center space-x-2 text-[13px] font-medium text-zinc-400">
+        <Link to={`/${username}/${reponame}`} className="hover:text-zinc-900 transition-colors">
           {reponame}
         </Link>
         {pathSegments.map((segment, idx) => {
           const path = pathSegments.slice(0, idx + 1).join('/');
           return (
             <React.Fragment key={path}>
-              <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+              <ChevronRight className="h-3.5 w-3.5 text-zinc-200" />
               <Link
                 to={`/${username}/${reponame}/tree/main/${path}`}
-                className={idx === pathSegments.length - 1 ? "text-foreground font-bold" : "hover:text-primary transition-colors"}
+                className={idx === pathSegments.length - 1 ? "text-zinc-900 font-bold" : "hover:text-zinc-900 transition-colors"}
               >
                 {segment}
               </Link>
@@ -41,56 +39,57 @@ export function FileBrowser({ repoId }: FileBrowserProps) {
           );
         })}
       </nav>
-      <div className="border rounded-xl bg-card overflow-hidden shadow-sm">
-        <div className="bg-muted/50 p-4 flex items-center justify-between border-b">
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <Avatar className="h-6 w-6 border shadow-sm">
+      <div className="border border-zinc-100 rounded-2xl bg-white overflow-hidden">
+        <div className="bg-zinc-50/50 p-4 px-6 flex items-center justify-between border-b border-zinc-100">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-6 w-6 border border-zinc-200">
               <AvatarImage src="https://api.dicebear.com/7.x/bottts/svg?seed=cleudo" />
               <AvatarFallback>CC</AvatarFallback>
             </Avatar>
-            <span>Último commit por <strong className="text-primary hover:underline cursor-pointer">automacoescomerciais</strong></span>
+            <span className="text-xs font-medium text-zinc-600">
+              <strong className="text-zinc-900">automacoescomerciais</strong> atualizou o motor principal
+            </span>
           </div>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="hidden sm:inline">Refatoração do sistema para Cleudocode Core v3</span>
-            <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> Há 1 dia</span>
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            <Clock className="h-3 w-3" /> há 1 dia
           </div>
         </div>
-        <div className="divide-y">
+        <div className="divide-y divide-zinc-50">
           {nodes.length > 0 ? nodes.map((node) => (
-            <div key={node.id} className="flex items-center justify-between p-3 px-4 hover:bg-muted/30 transition-colors group">
-              <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div key={node.id} className="flex items-center justify-between p-4 px-6 hover:bg-zinc-50/50 transition-colors group">
+              <div className="flex items-center gap-4 flex-1 min-w-0">
                 {node.type === 'folder' ? (
-                  <Folder className="h-4 w-4 text-blue-500 fill-blue-500/20" />
+                  <Folder className="h-4 w-4 text-zinc-400" />
                 ) : (
-                  <FileCode className="h-4 w-4 text-muted-foreground/70" />
+                  <FileCode className="h-4 w-4 text-zinc-300" />
                 )}
                 <Link
                   to={`/${username}/${reponame}/${node.type === 'folder' ? 'tree' : 'blob'}/main/${node.path}`}
-                  className="text-sm font-medium group-hover:text-primary truncate"
+                  className="text-[13px] font-medium text-zinc-700 group-hover:text-zinc-900 truncate"
                 >
                   {node.name}
                 </Link>
               </div>
-              <div className="flex items-center gap-8 text-xs text-muted-foreground">
-                <span className="hidden md:inline max-w-[200px] truncate">{node.lastCommitMsg}</span>
-                <span className="w-24 text-right">há {formatDistanceToNow(new Date(node.lastCommitDate), { locale: ptBR })}</span>
+              <div className="flex items-center gap-12 text-[11px] font-medium text-zinc-400">
+                <span className="hidden md:inline max-w-[240px] truncate text-zinc-300">{node.lastCommitMsg}</span>
+                <span className="w-24 text-right uppercase tracking-tighter">há {formatDistanceToNow(new Date(node.lastCommitDate), { locale: ptBR })}</span>
               </div>
             </div>
           )) : (
-            <div className="p-8 text-center text-sm text-muted-foreground">
-              Nenhum arquivo encontrado neste diretório.
+            <div className="p-16 text-center text-sm text-zinc-300 font-medium italic">
+              Diretório vazio.
             </div>
           )}
         </div>
       </div>
       {readmeFile && (
-        <div id="readme" className="border rounded-xl bg-card shadow-sm overflow-hidden">
-          <div className="bg-muted/30 px-4 py-2 border-b flex items-center gap-2">
-            <Book className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs font-bold uppercase tracking-wider">{readmeFile.name}</span>
+        <div className="border border-zinc-100 rounded-2xl bg-white">
+          <div className="bg-zinc-50/50 px-6 py-4 border-b border-zinc-100 flex items-center gap-2.5">
+            <Book className="h-4 w-4 text-zinc-400" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-500">{readmeFile.name}</span>
           </div>
-          <div className="p-8 prose prose-sm dark:prose-invert max-w-none">
-            <MarkdownViewer content={readmeFile.content || "# README\nConteúdo não disponível."} />
+          <div className="p-10 lg:p-16">
+            <MarkdownViewer content={readmeFile.content || "# README\nConteúdo indisponível."} />
           </div>
         </div>
       )}

@@ -19,116 +19,104 @@ type AppLayoutProps = {
 };
 export function AppLayout({ children, className }: AppLayoutProps): JSX.Element {
   useEffect(() => {
-    document.title = "Cleudocode - A IA que realmente faz as coisas.";
+    document.title = "Cleudocode - Minimalismo e Potência.";
   }, []);
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
-      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 max-w-7xl mx-auto items-center px-4 sm:px-6 lg:px-8">
-          <div className="mr-4 flex items-center gap-6">
-            <Link to="/" className="flex items-center space-x-2 group">
-              <div className="bg-primary rounded-lg p-1.5 transition-transform group-hover:scale-110">
-                <Terminal className="h-6 w-6 text-primary-foreground" />
+    <div className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col font-sans selection:bg-zinc-200 selection:text-zinc-900">
+      <header className="sticky top-0 z-50 w-full border-b border-zinc-200/60 bg-white/80 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <Link to="/" className="flex items-center space-x-2.5 group">
+              <div className="bg-zinc-900 rounded-lg p-1.5 transition-transform group-hover:scale-105">
+                <Terminal className="h-5 w-5 text-white" />
               </div>
-              <span className="hidden font-bold text-xl sm:inline-block tracking-tight">Cleudocode</span>
+              <span className="font-bold text-lg tracking-tight">Cleudocode</span>
             </Link>
-            <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-              <Link to="/" className="transition-colors hover:text-foreground text-foreground/60">Explorar</Link>
-              <Link to="/issues" className="transition-colors hover:text-foreground text-foreground/60">Problemas</Link>
-              <Link to="/pulls" className="transition-colors hover:text-foreground text-foreground/60">Solicitações de Pull</Link>
+            <nav className="hidden md:flex items-center space-x-7 text-[13px] font-medium text-zinc-500">
+              <Link to="/" className="hover:text-zinc-900 transition-colors">Explorar</Link>
+              <Link to="/issues" className="hover:text-zinc-900 transition-colors">Issues</Link>
+              <Link to="/pulls" className="hover:text-zinc-900 transition-colors">Pull Requests</Link>
             </nav>
           </div>
-          <div className="flex flex-1 items-center justify-end space-x-4">
-            <div className="w-full flex-1 md:w-auto md:flex-none">
-              <div className="relative group">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-foreground transition-colors" />
-                <Input
-                  type="search"
-                  placeholder="Pesquisar no Cleudocode..."
-                  className="pl-10 w-full md:w-[240px] lg:w-[320px] bg-muted/50 border-transparent focus:bg-background focus:border-border transition-all rounded-xl h-10"
-                />
-              </div>
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:block relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+              <Input
+                type="search"
+                placeholder="Pesquisar..."
+                className="pl-9 w-[200px] lg:w-[280px] bg-zinc-50 border-zinc-200/80 focus:bg-white focus:border-zinc-400 transition-all rounded-xl h-9 text-xs"
+              />
             </div>
-            <nav className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl">
-                <Plus className="h-5 w-5" />
+            <div className="flex items-center gap-1.5">
+              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-zinc-500">
+                <Plus className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl">
-                <Bell className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-zinc-500">
+                <Bell className="h-4 w-4" />
               </Button>
               <ThemeToggle className="static" />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full ml-2 ring-offset-background transition-all hover:ring-2 hover:ring-primary/20">
-                    <Avatar className="h-9 w-9 border">
+                  <Button variant="ghost" className="h-9 w-9 rounded-full ml-1 ring-offset-background hover:bg-zinc-100 transition-all">
+                    <Avatar className="h-8 w-8 border border-zinc-200">
                       <AvatarImage src="https://github.com/shadcn.png" />
                       <AvatarFallback>SC</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 rounded-xl" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
+                <DropdownMenuContent className="w-56 rounded-xl border-zinc-200 shadow-xl" align="end">
+                  <DropdownMenuLabel className="font-normal p-3">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">Desenvolvedor</p>
-                      <p className="text-xs leading-none text-muted-foreground">contato@automacoescomerciais.com.br</p>
+                      <p className="text-sm font-semibold">Desenvolvedor</p>
+                      <p className="text-xs text-zinc-500">contato@automacoescomerciais.com.br</p>
                     </div>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator className="bg-zinc-100" />
                   <DropdownMenuItem asChild>
-                    <Link to="/automacoescomerciais" className="cursor-pointer">Seu perfil</Link>
+                    <Link to="/automacoescomerciais" className="p-3 cursor-pointer">Seu perfil</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">Configurações</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">Sair</DropdownMenuItem>
+                  <DropdownMenuItem className="p-3 cursor-pointer">Configurações</DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-zinc-100" />
+                  <DropdownMenuItem className="p-3 cursor-pointer text-red-500">Sair</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </nav>
+            </div>
           </div>
         </div>
       </header>
       <main className={`flex-1 ${className}`}>
         {children}
       </main>
-      <footer className="border-t bg-muted/20">
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Terminal className="h-6 w-6" />
+      <footer className="border-t border-zinc-200/60 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div className="col-span-2 space-y-5">
+              <div className="flex items-center gap-2.5">
+                <Terminal className="h-5 w-5" />
                 <span className="font-bold text-lg">Cleudocode</span>
               </div>
-              <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-                A IA que realmente faz as coisas. Uma solução exclusiva da Automações Comerciais Integradas para automação avançada e criação de conteúdo.
+              <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
+                A IA de elite para automação comercial e orquestração de sistemas. Desenvolvido com exclusividade pela Automações Comerciais Integradas.
               </p>
             </div>
             <div className="space-y-4">
-              <h4 className="font-semibold text-sm uppercase tracking-wider">Fale Conosco</h4>
-              <div className="space-y-2">
-                <a href="mailto:contato@automacoescomerciais.com.br" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-                  <Mail className="h-4 w-4" />
-                  contato@automacoescomerciais.com.br
-                </a>
-                <a href="https://wa.me/558894227586" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-green-500 transition-colors">
-                  <MessageCircle className="h-4 w-4" />
-                  Suporte WhatsApp
-                </a>
-              </div>
+              <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400">Contato</h4>
+              <nav className="flex flex-col gap-3">
+                <a href="mailto:contato@automacoescomerciais.com.br" className="text-sm text-zinc-600 hover:text-zinc-900 transition-colors">Email</a>
+                <a href="https://wa.me/558894227586" className="text-sm text-zinc-600 hover:text-zinc-900 transition-colors">WhatsApp</a>
+              </nav>
             </div>
             <div className="space-y-4">
-              <h4 className="font-semibold text-sm uppercase tracking-wider">Jurídico</h4>
-              <p className="text-sm text-muted-foreground">
-                © Automações Comerciais Integradas 2026. Todos os direitos reservados.
-              </p>
+              <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400">Legal</h4>
+              <nav className="flex flex-col gap-3">
+                <Link to="#" className="text-sm text-zinc-600 hover:text-zinc-900 transition-colors">Privacidade</Link>
+                <Link to="#" className="text-sm text-zinc-600 hover:text-zinc-900 transition-colors">Termos</Link>
+              </nav>
             </div>
           </div>
-          <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-muted-foreground">
-              Construído com precisão para o futuro da criação. 🤖✨
-            </p>
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <Link to="#" className="hover:underline">Política de Privacidade</Link>
-              <Link to="#" className="hover:underline">Termos de Serviço</Link>
-            </div>
+          <div className="mt-16 pt-8 border-t border-zinc-100 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-zinc-400">© 2026 Automações Comerciais Integradas.</p>
+            <p className="text-[10px] font-medium tracking-wider text-zinc-300 uppercase">Built for Excellence</p>
           </div>
         </div>
       </footer>

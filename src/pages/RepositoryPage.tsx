@@ -1,14 +1,11 @@
 import React from 'react';
-import { useParams, Link, Routes, Route, useLocation } from 'react-router-dom';
+import { useParams, Link, Outlet, useLocation } from 'react-router-dom';
 import {
   Star,
   GitFork,
   Code,
   CircleDot,
   GitPullRequest,
-  Play,
-  ShieldAlert,
-  Settings,
   BookOpen,
   Eye,
   AlertTriangle
@@ -16,26 +13,21 @@ import {
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MOCK_REPOSITORIES } from '@shared/mock-data';
-import { FileBrowser } from '@/components/git/FileBrowser';
-import { CodeViewer } from '@/components/git/CodeViewer';
-import { IssueList } from '@/components/git/IssueList';
-import { PullRequestList } from '@/components/git/PullRequestList';
-import { IssueDetailPage } from '@/pages/IssueDetailPage';
-import { PullRequestDetailPage } from '@/pages/PullRequestDetailPage';
 export function RepositoryPage() {
   const { username, reponame } = useParams();
   const location = useLocation();
-  const repo = MOCK_REPOSITORIES.find(r => r.name === reponame && r.ownerUsername === username);
+  const repo = MOCK_REPOSITORIES.find(
+    r => r.name === reponame && r.ownerUsername === username
+  );
   if (!repo) {
     return (
       <AppLayout>
         <div className="container max-w-7xl mx-auto px-4 py-20 text-center space-y-4">
-          <AlertTriangle className="h-12 w-12 text-destructive mx-auto" />
-          <h1 className="text-3xl font-bold">Repositório Não Encontrado</h1>
-          <p className="text-muted-foreground">O repositório <strong>{username}/{reponame}</strong> não existe ou você não tem acesso.</p>
-          <Button asChild className="mt-4">
+          <AlertTriangle className="h-12 w-12 text-destructive/50 mx-auto" />
+          <h1 className="text-2xl font-bold tracking-tight">Repositório Não Encontrado</h1>
+          <p className="text-muted-foreground">O repositório {username}/{reponame} não está disponível.</p>
+          <Button asChild variant="outline" className="mt-4 rounded-xl">
             <Link to="/">Voltar ao Início</Link>
           </Button>
         </div>
@@ -43,92 +35,78 @@ export function RepositoryPage() {
     );
   }
   const pathParts = location.pathname.split('/');
-  let currentView = 'code';
-  if (pathParts.includes('issues')) currentView = 'issues';
-  else if (pathParts.includes('pulls') || pathParts.includes('pull')) currentView = 'pulls';
-  else if (pathParts.includes('settings')) currentView = 'settings';
-  else if (pathParts.includes('actions')) currentView = 'actions';
-  else if (pathParts.includes('security')) currentView = 'security';
+  const isIssues = pathParts.includes('issues');
+  const isPulls = pathParts.includes('pulls') || pathParts.includes('pull');
+  const currentTab = isIssues ? 'issues' : isPulls ? 'pulls' : 'code';
   return (
     <AppLayout>
-      <div className="bg-muted/30 border-b">
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-2 flex-wrap">
-              <BookOpen className="h-5 w-5 text-muted-foreground" />
-              <div className="flex items-center text-xl font-semibold tracking-tight">
-                <Link to={`/${repo.ownerUsername}`} className="text-primary hover:underline">
+      <div className="bg-white border-b border-zinc-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-0">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="p-2 bg-zinc-50 rounded-xl border border-zinc-100">
+                <BookOpen className="h-5 w-5 text-zinc-400" />
+              </div>
+              <div className="flex items-center text-xl tracking-tight">
+                <Link to={`/${repo.ownerUsername}`} className="text-zinc-500 hover:text-zinc-900 transition-colors">
                   {repo.ownerUsername}
                 </Link>
-                <span className="mx-1 text-muted-foreground/50">/</span>
-                <Link to={`/${repo.ownerUsername}/${repo.name}`} className="text-primary hover:underline font-bold">
+                <span className="mx-1 text-zinc-300">/</span>
+                <Link to={`/${repo.ownerUsername}/${repo.name}`} className="text-zinc-900 font-bold hover:underline">
                   {repo.name}
                 </Link>
               </div>
-              <Badge variant="outline" className="rounded-full text-[10px] px-2 py-0 border-muted-foreground/20">
-                {repo.visibility === 'public' ? 'Público' : repo.visibility}
+              <Badge variant="outline" className="rounded-full text-[10px] font-medium border-zinc-200 text-zinc-500 px-2.5">
+                {repo.visibility === 'public' ? 'Público' : 'Privado'}
               </Badge>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="h-8 gap-1.5 rounded-lg border-muted-foreground/20">
-                <Eye className="h-3.5 w-3.5" />
-                <span>Seguir</span>
-                <Badge variant="secondary" className="px-1.5 py-0 text-[10px] ml-1 bg-muted">1.2k</Badge>
+              <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl border-zinc-200 text-xs font-medium bg-white hover:bg-zinc-50">
+                <Eye className="h-3.5 w-3.5 mr-2 text-zinc-400" /> Seguir
+                <span className="ml-2 pl-2 border-l border-zinc-200 text-zinc-400">1.2k</span>
               </Button>
-              <Button variant="outline" size="sm" className="h-8 gap-1.5 rounded-lg border-muted-foreground/20">
-                <GitFork className="h-3.5 w-3.5" />
-                <span>Bifurcar</span>
-                <Badge variant="secondary" className="px-1.5 py-0 text-[10px] ml-1 bg-muted">{repo.forks}</Badge>
+              <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl border-zinc-200 text-xs font-medium bg-white hover:bg-zinc-50">
+                <GitFork className="h-3.5 w-3.5 mr-2 text-zinc-400" /> Bifurcar
+                <span className="ml-2 pl-2 border-l border-zinc-200 text-zinc-400">{repo.forks}</span>
               </Button>
-              <Button variant="outline" size="sm" className="h-8 gap-1.5 rounded-lg border-muted-foreground/20 shadow-sm">
-                <Star className="h-3.5 w-3.5" />
-                <span>Favoritar</span>
-                <Badge variant="secondary" className="px-1.5 py-0 text-[10px] ml-1 bg-muted">{repo.stars}</Badge>
+              <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl border-zinc-200 text-xs font-medium bg-white hover:bg-zinc-50 shadow-sm">
+                <Star className="h-3.5 w-3.5 mr-2 text-zinc-400" /> Favoritar
+                <span className="ml-2 pl-2 border-l border-zinc-200 text-zinc-400">{repo.stars}</span>
               </Button>
             </div>
           </div>
-          <div className="mt-6">
-            <Tabs value={currentView} className="w-full">
-              <TabsList className="bg-transparent h-auto p-0 gap-6 overflow-x-auto scrollbar-hide border-none">
-                <TabsTrigger value="code" asChild>
-                  <Link to={`/${username}/${reponame}`} className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
-                    <Code className="h-4 w-4" /> Código
-                  </Link>
-                </TabsTrigger>
-                <TabsTrigger value="issues" asChild>
-                  <Link to={`/${username}/${reponame}/issues`} className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
-                    <CircleDot className="h-4 w-4" /> Problemas <Badge variant="secondary" className="px-1.5 py-0 ml-1 bg-muted/60">12</Badge>
-                  </Link>
-                </TabsTrigger>
-                <TabsTrigger value="pulls" asChild>
-                  <Link to={`/${username}/${reponame}/pulls`} className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
-                    <GitPullRequest className="h-4 w-4" /> Solicitações de Pull <Badge variant="secondary" className="px-1.5 py-0 ml-1 bg-muted/60">3</Badge>
-                  </Link>
-                </TabsTrigger>
-                <TabsTrigger value="actions" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
-                  <Play className="h-4 w-4" /> Ações
-                </TabsTrigger>
-                <TabsTrigger value="security" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
-                  <ShieldAlert className="h-4 w-4" /> Segurança
-                </TabsTrigger>
-                <TabsTrigger value="settings" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
-                  <Settings className="h-4 w-4" /> Configurações
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
+          <nav className="flex items-center gap-8 text-sm font-medium">
+            <Link 
+              to={`/${username}/${reponame}`} 
+              className={`pb-4 border-b-2 transition-all ${currentTab === 'code' ? 'border-zinc-900 text-zinc-900' : 'border-transparent text-zinc-400 hover:text-zinc-600'}`}
+            >
+              <span className="flex items-center gap-2">
+                <Code className="h-4 w-4" /> Código
+              </span>
+            </Link>
+            <Link 
+              to={`/${username}/${reponame}/issues`} 
+              className={`pb-4 border-b-2 transition-all ${currentTab === 'issues' ? 'border-zinc-900 text-zinc-900' : 'border-transparent text-zinc-400 hover:text-zinc-600'}`}
+            >
+              <span className="flex items-center gap-2">
+                <CircleDot className="h-4 w-4" /> Problemas
+                <Badge variant="secondary" className="px-1.5 py-0 text-[10px] bg-zinc-100 text-zinc-500 font-normal">12</Badge>
+              </span>
+            </Link>
+            <Link 
+              to={`/${username}/${reponame}/pulls`} 
+              className={`pb-4 border-b-2 transition-all ${currentTab === 'pulls' ? 'border-zinc-900 text-zinc-900' : 'border-transparent text-zinc-400 hover:text-zinc-600'}`}
+            >
+              <span className="flex items-center gap-2">
+                <GitPullRequest className="h-4 w-4" /> Solicitações
+                <Badge variant="secondary" className="px-1.5 py-0 text-[10px] bg-zinc-100 text-zinc-500 font-normal">3</Badge>
+              </span>
+            </Link>
+          </nav>
         </div>
       </div>
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Routes>
-          <Route index element={<FileBrowser repoId={repo.id} />} />
-          <Route path="tree/:branch/*" element={<FileBrowser repoId={repo.id} />} />
-          <Route path="blob/:branch/*" element={<CodeViewer repoId={repo.id} />} />
-          <Route path="issues" element={<IssueList repoId={repo.id} />} />
-          <Route path="issues/:number" element={<IssueDetailPage repoId={repo.id} />} />
-          <Route path="pulls" element={<PullRequestList repoId={repo.id} />} />
-          <Route path="pulls/:number" element={<PullRequestDetailPage repoId={repo.id} />} />
-        </Routes>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <Outlet context={{ repoId: repo.id }} />
       </div>
     </AppLayout>
   );
