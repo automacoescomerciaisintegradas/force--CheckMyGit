@@ -1,6 +1,6 @@
 # Cloudflare Workers Full-Stack Template
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/automacoescomerciaisintegradas/force--CheckMyGit)
 
 A production-ready full-stack template for building modern applications on Cloudflare Workers. This template includes a React frontend, Durable Objects for stateful backend logic, and a complete development and deployment workflow.
 
@@ -72,7 +72,7 @@ Extend the project by editing:
 
 ## Deployment
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/automacoescomerciaisintegradas/force--CheckMyGit)
 
 Deploy to Cloudflare Workers:
 
