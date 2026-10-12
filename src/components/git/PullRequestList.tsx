@@ -4,6 +4,7 @@ import { GitPullRequest, GitMerge, CheckCircle2, Plus } from 'lucide-react';
 import { MOCK_PRS, MOCK_REPOSITORIES } from '@shared/mock-data';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 interface PRListProps {
   repoId?: string;
@@ -37,9 +38,9 @@ export function PullRequestList({ repoId }: PRListProps) {
             )}
           >
             <GitPullRequest className={cn("h-4 w-4", filter === 'open' && "text-green-500")} />
-            {repoId 
-              ? MOCK_PRS.filter(p => p.repoId === repoId && p.status === 'open').length 
-              : MOCK_PRS.filter(p => p.status === 'open').length} Open
+            {repoId
+              ? MOCK_PRS.filter(p => p.repoId === repoId && p.status === 'open').length
+              : MOCK_PRS.filter(p => p.status === 'open').length} Abertas
           </button>
           <button
             onClick={() => setFilter('merged')}
@@ -49,21 +50,21 @@ export function PullRequestList({ repoId }: PRListProps) {
             )}
           >
             <GitMerge className={cn("h-4 w-4", filter === 'merged' && "text-purple-500")} />
-            {repoId 
-              ? MOCK_PRS.filter(p => p.repoId === repoId && p.status === 'merged').length 
-              : MOCK_PRS.filter(p => p.status === 'merged').length} Merged
+            {repoId
+              ? MOCK_PRS.filter(p => p.repoId === repoId && p.status === 'merged').length
+              : MOCK_PRS.filter(p => p.status === 'merged').length} Mescladas
           </button>
         </div>
         <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg gap-1.5">
-          <Plus className="h-4 w-4" /> New Pull Request
+          <Plus className="h-4 w-4" /> Nova Solicitação de Pull
         </Button>
       </div>
       <div className="border rounded-xl bg-card overflow-hidden shadow-sm">
         {prs.length === 0 ? (
           <div className="p-12 text-center space-y-3">
             <GitPullRequest className="h-12 w-12 text-muted-foreground/30 mx-auto" />
-            <h3 className="text-lg font-semibold">No pull requests found</h3>
-            <p className="text-muted-foreground">There are no {filter} pull requests to display.</p>
+            <h3 className="text-lg font-semibold">Nenhuma solicitação encontrada</h3>
+            <p className="text-muted-foreground">Não há solicitações de pull {filter === 'open' ? 'abertas' : 'mescladas'} para exibir.</p>
           </div>
         ) : (
           <div className="divide-y">
@@ -85,7 +86,7 @@ export function PullRequestList({ repoId }: PRListProps) {
                     </Link>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    #{pr.number} {pr.status === 'merged' ? 'merged' : 'opened'} {formatDistanceToNow(new Date(pr.mergedAt || pr.createdAt))} ago
+                    #{pr.number} {pr.status === 'merged' ? 'mesclada' : 'aberta'} há {formatDistanceToNow(new Date(pr.mergedAt || pr.createdAt), { locale: ptBR })}
                   </div>
                 </div>
               </div>

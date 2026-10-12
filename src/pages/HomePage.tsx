@@ -8,13 +8,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MOCK_REPOSITORIES, MOCK_ACTIVITY } from '@shared/mock-data';
 import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 export function HomePage() {
   const scrollToFeatured = () => {
     document.getElementById('featured-projects')?.scrollIntoView({ behavior: 'smooth' });
   };
   return (
     <AppLayout>
-      {/* High-Impact Hero Section */}
+      {/* Seção Hero de Alto Impacto */}
       <section className="relative overflow-hidden border-b bg-muted/10">
         <div className="absolute inset-0 bg-gradient-mesh opacity-10 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10">
@@ -25,31 +26,31 @@ export function HomePage() {
           >
             <Badge variant="secondary" className="px-4 py-1.5 rounded-full text-sm bg-primary/10 text-primary border-primary/20 animate-pulse">
               <Sparkles className="h-3.5 w-3.5 mr-2" />
-              Automate everything with Cleudocode
+              Automatize tudo com Cleudocode
             </Badge>
             <h1 className="text-display font-black tracking-tight leading-[1.1]">
               <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                The AI that actually does things.
+                A IA que realmente faz as coisas.
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground font-medium leading-relaxed">
               Bem-vindo(a) ao Futuro da Criação de Conteúdo! 🤖✨
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 asChild
                 className="h-14 px-8 text-lg font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 hover:shadow-glow-lg hover:scale-105 transition-all w-full sm:w-auto cursor-pointer"
               >
-                <Link to="/automacoescomerciais">Get Started Now <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                <Link to="/automacoescomerciais">Começar Agora <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 onClick={scrollToFeatured}
                 className="h-14 px-8 text-lg font-bold rounded-2xl border-2 w-full sm:w-auto hover:bg-muted transition-colors cursor-pointer"
               >
-                Explore Repositories
+                Explorar Repositórios
               </Button>
             </div>
           </motion.div>
@@ -57,16 +58,16 @@ export function HomePage() {
       </section>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main Feed */}
+          {/* Feed Principal */}
           <div className="lg:col-span-2 space-y-10">
             <section id="featured-projects">
               <div className="flex items-center justify-between mb-8">
                 <div className="space-y-1">
                   <h2 className="text-3xl font-bold tracking-tight flex items-center gap-3">
                     <Zap className="h-7 w-7 text-primary" />
-                    Featured Projects
+                    Projetos em Destaque
                   </h2>
-                  <p className="text-muted-foreground">Discover what the Cleudocode community is building.</p>
+                  <p className="text-muted-foreground">Descubra o que a comunidade Cleudocode está construindo.</p>
                 </div>
               </div>
               <div className="grid gap-6">
@@ -93,7 +94,7 @@ export function HomePage() {
                             </CardDescription>
                           </div>
                           <Badge variant="outline" className="font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-md">
-                            {repo.visibility}
+                            {repo.visibility === 'public' ? 'Público' : repo.visibility}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -112,7 +113,7 @@ export function HomePage() {
                             <span>{repo.forks.toLocaleString()}</span>
                           </div>
                           <div className="ml-auto hidden sm:block text-xs font-medium bg-muted px-3 py-1 rounded-full">
-                            Updated {formatDistanceToNow(new Date(repo.updatedAt))} ago
+                            Atualizado há {formatDistanceToNow(new Date(repo.updatedAt), { locale: ptBR })}
                           </div>
                         </div>
                       </CardContent>
@@ -122,14 +123,14 @@ export function HomePage() {
               </div>
             </section>
           </div>
-          {/* Sidebar Activity */}
+          {/* Atividade Lateral */}
           <aside className="space-y-10">
             <section className="bg-muted/30 p-8 rounded-3xl border border-border/50">
               <div className="flex items-center gap-3 mb-8">
                 <div className="p-2 bg-primary/10 rounded-xl">
                   <Clock className="h-5 w-5 text-primary" />
                 </div>
-                <h2 className="text-xl font-bold tracking-tight">System Pulse</h2>
+                <h2 className="text-xl font-bold tracking-tight">Pulso do Sistema</h2>
               </div>
               <div className="space-y-8">
                 {MOCK_ACTIVITY.map((event) => (
@@ -147,7 +148,7 @@ export function HomePage() {
                         </Link>
                         {" "}
                         <span className="text-muted-foreground">
-                          {event.type === 'push' ? 'deployed updates to' : event.type === 'star' ? 'voted for' : 'updated'}
+                          {event.type === 'push' ? 'implantou atualizações em' : event.type === 'star' ? 'votou em' : 'atualizou'}
                         </span>
                         {" "}
                         <Link to={`/${event.userUsername}/${event.repoName}`} className="font-bold hover:text-primary transition-colors">
@@ -156,7 +157,7 @@ export function HomePage() {
                       </p>
                       <p className="text-xs text-muted-foreground/70 flex items-center gap-1">
                         <Clock className="h-3 w-3" />
-                        {formatDistanceToNow(new Date(event.timestamp))} ago
+                        Há {formatDistanceToNow(new Date(event.timestamp), { locale: ptBR })}
                       </p>
                     </div>
                   </div>
@@ -164,12 +165,12 @@ export function HomePage() {
               </div>
             </section>
             <section className="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-3xl text-white space-y-4 shadow-glow">
-               <h3 className="font-bold text-xl">Need Custom AI?</h3>
+               <h3 className="font-bold text-xl">Precisa de IA Sob Medida?</h3>
                <p className="text-blue-100 text-sm leading-relaxed">
-                 Automações Comerciais Integradas can build custom Cleudocode instances for your business.
+                 A Automações Comerciais Integradas pode criar instâncias personalizadas do Cleudocode para o seu negócio.
                </p>
                <Button className="w-full bg-white text-blue-700 hover:bg-blue-50 font-bold rounded-xl" asChild>
-                 <a href="https://wa.me/558894227586">Talk to an Expert</a>
+                 <a href="https://wa.me/558894227586">Falar com um Especialista</a>
                </Button>
             </section>
           </aside>

@@ -33,10 +33,10 @@ export function RepositoryPage() {
       <AppLayout>
         <div className="container max-w-7xl mx-auto px-4 py-20 text-center space-y-4">
           <AlertTriangle className="h-12 w-12 text-destructive mx-auto" />
-          <h1 className="text-3xl font-bold">Repository Not Found</h1>
-          <p className="text-muted-foreground">The repository <strong>{username}/{reponame}</strong> does not exist or you don't have access.</p>
+          <h1 className="text-3xl font-bold">Repositório Não Encontrado</h1>
+          <p className="text-muted-foreground">O repositório <strong>{username}/{reponame}</strong> não existe ou você não tem acesso.</p>
           <Button asChild className="mt-4">
-            <Link to="/">Go Home</Link>
+            <Link to="/">Voltar ao Início</Link>
           </Button>
         </div>
       </AppLayout>
@@ -66,23 +66,23 @@ export function RepositoryPage() {
                 </Link>
               </div>
               <Badge variant="outline" className="rounded-full text-[10px] px-2 py-0 border-muted-foreground/20">
-                {repo.visibility}
+                {repo.visibility === 'public' ? 'Público' : repo.visibility}
               </Badge>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" className="h-8 gap-1.5 rounded-lg border-muted-foreground/20">
                 <Eye className="h-3.5 w-3.5" />
-                <span>Watch</span>
+                <span>Seguir</span>
                 <Badge variant="secondary" className="px-1.5 py-0 text-[10px] ml-1 bg-muted">1.2k</Badge>
               </Button>
               <Button variant="outline" size="sm" className="h-8 gap-1.5 rounded-lg border-muted-foreground/20">
                 <GitFork className="h-3.5 w-3.5" />
-                <span>Fork</span>
+                <span>Bifurcar</span>
                 <Badge variant="secondary" className="px-1.5 py-0 text-[10px] ml-1 bg-muted">{repo.forks}</Badge>
               </Button>
               <Button variant="outline" size="sm" className="h-8 gap-1.5 rounded-lg border-muted-foreground/20 shadow-sm">
                 <Star className="h-3.5 w-3.5" />
-                <span>Star</span>
+                <span>Favoritar</span>
                 <Badge variant="secondary" className="px-1.5 py-0 text-[10px] ml-1 bg-muted">{repo.stars}</Badge>
               </Button>
             </div>
@@ -92,27 +92,27 @@ export function RepositoryPage() {
               <TabsList className="bg-transparent h-auto p-0 gap-6 overflow-x-auto scrollbar-hide border-none">
                 <TabsTrigger value="code" asChild>
                   <Link to={`/${username}/${reponame}`} className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
-                    <Code className="h-4 w-4" /> Code
+                    <Code className="h-4 w-4" /> Código
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger value="issues" asChild>
                   <Link to={`/${username}/${reponame}/issues`} className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
-                    <CircleDot className="h-4 w-4" /> Issues <Badge variant="secondary" className="px-1.5 py-0 ml-1 bg-muted/60">12</Badge>
+                    <CircleDot className="h-4 w-4" /> Problemas <Badge variant="secondary" className="px-1.5 py-0 ml-1 bg-muted/60">12</Badge>
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger value="pulls" asChild>
                   <Link to={`/${username}/${reponame}/pulls`} className="data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all">
-                    <GitPullRequest className="h-4 w-4" /> Pull Requests <Badge variant="secondary" className="px-1.5 py-0 ml-1 bg-muted/60">3</Badge>
+                    <GitPullRequest className="h-4 w-4" /> Solicitações de Pull <Badge variant="secondary" className="px-1.5 py-0 ml-1 bg-muted/60">3</Badge>
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger value="actions" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
-                  <Play className="h-4 w-4" /> Actions
+                  <Play className="h-4 w-4" /> Ações
                 </TabsTrigger>
                 <TabsTrigger value="security" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
-                  <ShieldAlert className="h-4 w-4" /> Security
+                  <ShieldAlert className="h-4 w-4" /> Segurança
                 </TabsTrigger>
                 <TabsTrigger value="settings" className="hidden sm:flex data-[state=active]:border-primary data-[state=active]:bg-transparent border-b-2 border-transparent px-0 py-2 rounded-none gap-2 text-sm font-medium transition-all opacity-50 cursor-not-allowed">
-                  <Settings className="h-4 w-4" /> Settings
+                  <Settings className="h-4 w-4" /> Configurações
                 </TabsTrigger>
               </TabsList>
             </Tabs>

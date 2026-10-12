@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Folder, FileCode, ChevronRight, Clock, Book } from 'lucide-react';
 import { MOCK_FILE_NODES } from '@shared/mock-data';
 import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
 interface FileBrowserProps {
@@ -11,16 +12,16 @@ interface FileBrowserProps {
 export function FileBrowser({ repoId }: FileBrowserProps) {
   const { username, reponame, '*': splat } = useParams();
   const currentPath = splat || '';
-  // Breadcrumb calculation
+  // Cálculo de breadcrumb
   const pathSegments = currentPath.split('/').filter(Boolean);
-  // Logic to fetch nodes based on path
+  // Lógica para buscar nós com base no caminho
   const key = currentPath === '' ? repoId : `${repoId}-${currentPath.replace(/\//g, '-')}`;
   const nodes = MOCK_FILE_NODES[key] || [];
-  // Find README if it exists in the current nodes
+  // Encontrar README se existir nos nós atuais
   const readmeFile = nodes.find(n => n.name.toLowerCase() === 'readme.md' && n.type === 'file');
   return (
     <div className="space-y-6">
-      {/* Interactive Breadcrumbs */}
+      {/* Breadcrumbs Interativos */}
       <nav className="flex items-center space-x-1 text-sm font-medium text-muted-foreground">
         <Link to={`/${username}/${reponame}`} className="hover:text-primary transition-colors">
           {reponame}
@@ -47,11 +48,11 @@ export function FileBrowser({ repoId }: FileBrowserProps) {
               <AvatarImage src="https://api.dicebear.com/7.x/bottts/svg?seed=cleudo" />
               <AvatarFallback>CC</AvatarFallback>
             </Avatar>
-            <span>Latest commit by <strong className="text-primary hover:underline cursor-pointer">automacoescomerciais</strong></span>
+            <span>Último commit por <strong className="text-primary hover:underline cursor-pointer">automacoescomerciais</strong></span>
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="hidden sm:inline">Refactor system for Cleudocode Core v3</span>
-            <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> 1 day ago</span>
+            <span className="hidden sm:inline">Refatoração do sistema para Cleudocode Core v3</span>
+            <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> Há 1 dia</span>
           </div>
         </div>
         <div className="divide-y">
@@ -72,12 +73,12 @@ export function FileBrowser({ repoId }: FileBrowserProps) {
               </div>
               <div className="flex items-center gap-8 text-xs text-muted-foreground">
                 <span className="hidden md:inline max-w-[200px] truncate">{node.lastCommitMsg}</span>
-                <span className="w-24 text-right">{formatDistanceToNow(new Date(node.lastCommitDate))} ago</span>
+                <span className="w-24 text-right">há {formatDistanceToNow(new Date(node.lastCommitDate), { locale: ptBR })}</span>
               </div>
             </div>
           )) : (
             <div className="p-8 text-center text-sm text-muted-foreground">
-              No files found in this directory.
+              Nenhum arquivo encontrado neste diretório.
             </div>
           )}
         </div>
@@ -89,7 +90,7 @@ export function FileBrowser({ repoId }: FileBrowserProps) {
             <span className="text-xs font-bold uppercase tracking-wider">{readmeFile.name}</span>
           </div>
           <div className="p-8 prose prose-sm dark:prose-invert max-w-none">
-            <MarkdownViewer content={readmeFile.content || "# README\nContent not available."} />
+            <MarkdownViewer content={readmeFile.content || "# README\nConteúdo não disponível."} />
           </div>
         </div>
       )}

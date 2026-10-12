@@ -6,8 +6,8 @@ export const MOCK_USERS: User[] = [
     username: 'shadcn',
     name: 'Shadcn',
     avatar: 'https://github.com/shadcn.png',
-    bio: 'Design systems and UI components.',
-    location: 'New York, USA',
+    bio: 'Sistemas de design e componentes de interface.',
+    location: 'Nova York, EUA',
     website: 'https://shadcn.com',
     followers: 45200,
     following: 120,
@@ -18,8 +18,8 @@ export const MOCK_USERS: User[] = [
     username: 'automacoescomerciais',
     name: 'Cleudocode Core',
     avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=cleudo',
-    bio: 'Developing Cleudocode: The AI that actually does things. Integrated commercial automation experts.',
-    location: 'Remote',
+    bio: 'Desenvolvendo o Cleudocode: A IA que realmente faz as coisas. Especialistas em automação comercial integrada.',
+    location: 'Remoto',
     followers: 5800,
     following: 45,
     joinedAt: '2021-05-20',
@@ -31,7 +31,7 @@ export const MOCK_REPOSITORIES: Repository[] = [
     ownerId: 'u1',
     ownerUsername: 'shadcn',
     name: 'ui',
-    description: 'Beautifully designed components for Cleudocode interfaces. Accessible. Customizable. Open Source.',
+    description: 'Componentes lindamente projetados para interfaces Cleudocode. Acessível. Customizável. Código Aberto.',
     stars: 62300,
     forks: 4100,
     language: 'TypeScript',
@@ -44,44 +44,44 @@ export const MOCK_REPOSITORIES: Repository[] = [
     ownerId: 'u2',
     ownerUsername: 'automacoescomerciais',
     name: 'cleudocode-ai',
-    description: 'The core engine behind the most powerful automation and content creation AI on the market.',
+    description: 'O motor principal por trás da IA de automação e criação de conteúdo mais poderosa do mercado.',
     stars: 2540,
     forks: 180,
     language: 'TypeScript',
     visibility: 'public',
     updatedAt: subHours(new Date(), 2).toISOString(),
-    topics: ['ai', 'automation', 'automation-comercial', 'typescript'],
+    topics: ['ai', 'automacao', 'automacao-comercial', 'typescript'],
   },
   {
     id: 'r3',
     ownerId: 'u2',
     ownerUsername: 'automacoescomerciais',
     name: 'smart-marketing',
-    description: 'AI-driven marketing funnel automation for integrated commercial systems.',
+    description: 'Automação de funil de marketing baseada em IA para sistemas comerciais integrados.',
     stars: 840,
     forks: 56,
     language: 'Python',
     visibility: 'public',
     updatedAt: subDays(new Date(), 2).toISOString(),
-    topics: ['marketing', 'automation', 'python'],
+    topics: ['marketing', 'automacao', 'python'],
   }
 ];
 export const MOCK_FILE_NODES: Record<string, FileNode[]> = {
   'r2': [
-    { id: 'f1', name: 'src', type: 'folder', path: 'src', lastCommitMsg: 'Implement core Cleudocode reasoning engine', lastCommitDate: subDays(new Date(), 1).toISOString() },
-    { id: 'f2', name: 'automation', type: 'folder', path: 'automation', lastCommitMsg: 'Add WhatsApp integration hooks', lastCommitDate: subDays(new Date(), 2).toISOString() },
-    { id: 'f4', name: 'package.json', type: 'file', path: 'package.json', lastCommitMsg: 'Bump Cleudocode core dependencies', lastCommitDate: subDays(new Date(), 5).toISOString(), content: '{\n  "name": "cleudocode-ai",\n  "version": "2.1.0"\n}' },
-    { id: 'f5', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Update brand identity to Cleudocode', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Cleudocode AI\n\nAdvanced reasoning for complex tasks.\n\n## Getting Started\n\n```bash\nbun install cleudocode\n```\n\n## Features\n\n- Task Orchestration\n- Multi-modal Context' }
+    { id: 'f1', name: 'src', type: 'folder', path: 'src', lastCommitMsg: 'Implementação do motor de raciocínio principal do Cleudocode', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'f2', name: 'automation', type: 'folder', path: 'automation', lastCommitMsg: 'Adição de ganchos de integração com WhatsApp', lastCommitDate: subDays(new Date(), 2).toISOString() },
+    { id: 'f4', name: 'package.json', type: 'file', path: 'package.json', lastCommitMsg: 'Atualização de dependências principais do Cleudocode', lastCommitDate: subDays(new Date(), 5).toISOString(), content: '{\n  "name": "cleudocode-ai",\n  "version": "2.1.0"\n}' },
+    { id: 'f5', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Atualização da identidade visual para Cleudocode', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Cleudocode AI\n\nRaciocínio avançado para tarefas complexas.\n\n## Começando\n\n```bash\nbun install cleudocode\n```\n\n## Funcionalidades\n\n- Orquestração de Tarefas\n- Contexto Multi-modal' }
   ],
   'r3': [
-    { id: 'r3f1', name: 'funnels', type: 'folder', path: 'funnels', lastCommitMsg: 'Add lead scoring algorithm', lastCommitDate: subDays(new Date(), 3).toISOString() },
-    { id: 'r3f2', name: 'scripts', type: 'folder', path: 'scripts', lastCommitMsg: 'Data migration utilities', lastCommitDate: subDays(new Date(), 1).toISOString() },
-    { id: 'r3f3', name: 'main.py', type: 'file', path: 'main.py', lastCommitMsg: 'Marketing engine entrypoint', lastCommitDate: subDays(new Date(), 1).toISOString(), content: 'print("Smart Marketing v1.0")' },
-    { id: 'r3f4', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Documentation for funnels', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Smart Marketing\n\nAI-powered funnels for modern businesses.' }
+    { id: 'r3f1', name: 'funnels', type: 'folder', path: 'funnels', lastCommitMsg: 'Adição de algoritmo de pontuação de leads', lastCommitDate: subDays(new Date(), 3).toISOString() },
+    { id: 'r3f2', name: 'scripts', type: 'folder', path: 'scripts', lastCommitMsg: 'Utilitários de migração de dados', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'r3f3', name: 'main.py', type: 'file', path: 'main.py', lastCommitMsg: 'Ponto de entrada do motor de marketing', lastCommitDate: subDays(new Date(), 1).toISOString(), content: 'print("Smart Marketing v1.0")' },
+    { id: 'r3f4', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Documentação para funis', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Smart Marketing\n\nFunis movidos a IA para empresas modernas.' }
   ],
   'r2-src': [
-    { id: 'f6', name: 'engine', type: 'folder', path: 'src/engine', lastCommitMsg: 'Improve context handling', lastCommitDate: subDays(new Date(), 1).toISOString() },
-    { id: 'f7', name: 'main.ts', type: 'file', path: 'src/main.ts', lastCommitMsg: 'Bootstrapping Cleudocode', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Cleudocode Initialized");' }
+    { id: 'f6', name: 'engine', type: 'folder', path: 'src/engine', lastCommitMsg: 'Melhoria no manuseio de contexto', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'f7', name: 'main.ts', type: 'file', path: 'src/main.ts', lastCommitMsg: 'Inicialização do Cleudocode', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Cleudocode Inicializado");' }
   ]
 };
 export const MOCK_ISSUES: Issue[] = [
@@ -89,37 +89,37 @@ export const MOCK_ISSUES: Issue[] = [
     id: 'i1',
     repoId: 'r2',
     number: 1,
-    title: 'Cleudocode: Add multi-language support for voice synthesis',
+    title: 'Cleudocode: Adicionar suporte multi-idioma para síntese de voz',
     authorId: 'u2',
     status: 'open',
-    labels: ['feature', 'high-priority'],
+    labels: ['funcionalidade', 'alta-prioridade'],
     createdAt: subDays(new Date(), 2).toISOString(),
     commentsCount: 3,
-    description: 'Enable voice synthesis in Portuguese, Spanish and English for automated content agents.'
+    description: 'Habilitar síntese de voz em Português, Espanhol e Inglês para agentes de conteúdo automatizados.'
   },
   {
     id: 'i2',
     repoId: 'r2',
     number: 2,
-    title: 'Fix: Token limit overflow on deep automation chains',
+    title: 'Correção: Estouro do limite de tokens em cadeias de automação profundas',
     authorId: 'u1',
     status: 'closed',
-    labels: ['bug'],
+    labels: ['erro'],
     createdAt: subDays(new Date(), 5).toISOString(),
     commentsCount: 1,
-    description: 'Deep nested automation chains were hitting the context window limit.'
+    description: 'Cadeias de automação aninhadas estavam atingindo o limite da janela de contexto.'
   },
   {
     id: 'i3',
     repoId: 'r3',
     number: 1,
-    title: 'Optimize lead scoring latency',
+    title: 'Otimizar latência da pontuação de leads',
     authorId: 'u2',
     status: 'open',
     labels: ['performance'],
     createdAt: subDays(new Date(), 1).toISOString(),
     commentsCount: 0,
-    description: 'Lead scoring takes too long on high-volume days.'
+    description: 'A pontuação de leads está demorando muito em dias de alto volume.'
   }
 ];
 export const MOCK_PRS: PullRequest[] = [
@@ -127,11 +127,11 @@ export const MOCK_PRS: PullRequest[] = [
     id: 'p1',
     repoId: 'r2',
     number: 3,
-    title: 'Feat: Cleudocode Visual Identity Rebranding',
+    title: 'Func: Rebranding da Identidade Visual Cleudocode',
     authorId: 'u2',
     status: 'open',
     createdAt: subDays(new Date(), 1).toISOString(),
-    description: 'Switching all platform references to the new Cleudocode brand.',
+    description: 'Alterando todas as referências da plataforma para a nova marca Cleudocode.',
     baseBranch: 'main',
     headBranch: 'feat/rebrand-cleudo'
   },
@@ -139,19 +139,19 @@ export const MOCK_PRS: PullRequest[] = [
     id: 'p2',
     repoId: 'r3',
     number: 2,
-    title: 'Draft: New ML Pipeline for Attribution',
+    title: 'Rascunho: Nova Pipeline de ML para Atribuição',
     authorId: 'u2',
     status: 'open',
     createdAt: subHours(new Date(), 5).toISOString(),
-    description: 'Experimental attribution modeling.',
+    description: 'Modelagem de atribuição experimental.',
     baseBranch: 'main',
-    headBranch: 'ml/attribution'
+    headBranch: 'ml/atribuicao'
   }
 ];
 export const MOCK_COMMENTS: Record<string, IssueComment[]> = {
   'i1': [
-    { id: 'c1', authorId: 'u1', body: 'The Brazilian Portuguese model is ready for testing.', createdAt: subDays(new Date(), 1).toISOString() },
-    { id: 'c2', authorId: 'u2', body: 'Excellent. Please merge the PR into the experimental branch.', createdAt: subHours(new Date(), 12).toISOString() }
+    { id: 'c1', authorId: 'u1', body: 'O modelo de Português Brasileiro está pronto para testes.', createdAt: subDays(new Date(), 1).toISOString() },
+    { id: 'c2', authorId: 'u2', body: 'Excelente. Por favor, mescle o PR no ramo experimental.', createdAt: subHours(new Date(), 12).toISOString() }
   ]
 };
 export const MOCK_ACTIVITY: ActivityEvent[] = [

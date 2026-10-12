@@ -19,7 +19,7 @@ type AppLayoutProps = {
 };
 export function AppLayout({ children, className }: AppLayoutProps): JSX.Element {
   useEffect(() => {
-    document.title = "Cleudocode - The AI that actually does things.";
+    document.title = "Cleudocode - A IA que realmente faz as coisas.";
   }, []);
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
@@ -33,9 +33,9 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
               <span className="hidden font-bold text-xl sm:inline-block tracking-tight">Cleudocode</span>
             </Link>
             <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-              <Link to="/" className="transition-colors hover:text-foreground text-foreground/60">Explore</Link>
-              <Link to="/issues" className="transition-colors hover:text-foreground text-foreground/60">Issues</Link>
-              <Link to="/pulls" className="transition-colors hover:text-foreground text-foreground/60">Pull Requests</Link>
+              <Link to="/" className="transition-colors hover:text-foreground text-foreground/60">Explorar</Link>
+              <Link to="/issues" className="transition-colors hover:text-foreground text-foreground/60">Problemas</Link>
+              <Link to="/pulls" className="transition-colors hover:text-foreground text-foreground/60">Solicitações de Pull</Link>
             </nav>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-4">
@@ -44,7 +44,7 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-foreground transition-colors" />
                 <Input
                   type="search"
-                  placeholder="Search Cleudocode..."
+                  placeholder="Pesquisar no Cleudocode..."
                   className="pl-10 w-full md:w-[240px] lg:w-[320px] bg-muted/50 border-transparent focus:bg-background focus:border-border transition-all rounded-xl h-10"
                 />
               </div>
@@ -69,17 +69,17 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
                 <DropdownMenuContent className="w-56 rounded-xl" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">Developer</p>
+                      <p className="text-sm font-medium leading-none">Desenvolvedor</p>
                       <p className="text-xs leading-none text-muted-foreground">contato@automacoescomerciais.com.br</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/automacoescomerciais" className="cursor-pointer">Your profile</Link>
+                    <Link to="/automacoescomerciais" className="cursor-pointer">Seu perfil</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">Configurações</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">Log out</DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">Sair</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </nav>
@@ -98,11 +98,11 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
                 <span className="font-bold text-lg">Cleudocode</span>
               </div>
               <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-                The AI that actually does things. An exclusive solution by Automações Comerciais Integradas for advanced automation and content creation.
+                A IA que realmente faz as coisas. Uma solução exclusiva da Automações Comerciais Integradas para automação avançada e criação de conteúdo.
               </p>
             </div>
             <div className="space-y-4">
-              <h4 className="font-semibold text-sm uppercase tracking-wider">Contact Us</h4>
+              <h4 className="font-semibold text-sm uppercase tracking-wider">Fale Conosco</h4>
               <div className="space-y-2">
                 <a href="mailto:contato@automacoescomerciais.com.br" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                   <Mail className="h-4 w-4" />
@@ -110,24 +110,24 @@ export function AppLayout({ children, className }: AppLayoutProps): JSX.Element 
                 </a>
                 <a href="https://wa.me/558894227586" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-green-500 transition-colors">
                   <MessageCircle className="h-4 w-4" />
-                  WhatsApp Support
+                  Suporte WhatsApp
                 </a>
               </div>
             </div>
             <div className="space-y-4">
-              <h4 className="font-semibold text-sm uppercase tracking-wider">Legal</h4>
+              <h4 className="font-semibold text-sm uppercase tracking-wider">Jurídico</h4>
               <p className="text-sm text-muted-foreground">
-                © Automações Comerciais Integradas 2026. All rights reserved.
+                © Automações Comerciais Integradas 2026. Todos os direitos reservados.
               </p>
             </div>
           </div>
           <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xs text-muted-foreground">
-              Built with precision for the future of creation. 🤖✨
+              Construído com precisão para o futuro da criação. 🤖✨
             </p>
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <Link to="#" className="hover:underline">Privacy Policy</Link>
-              <Link to="#" className="hover:underline">Terms of Service</Link>
+              <Link to="#" className="hover:underline">Política de Privacidade</Link>
+              <Link to="#" className="hover:underline">Termos de Serviço</Link>
             </div>
           </div>
         </div>

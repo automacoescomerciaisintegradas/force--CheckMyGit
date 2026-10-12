@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { MOCK_USERS, MOCK_REPOSITORIES } from '@shared/mock-data';
 import { ContributionGrid } from '@/components/git/ContributionGrid';
 import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 export function ProfilePage() {
   const { username } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,20 +37,20 @@ export function ProfilePage() {
                 <p className="text-xl text-muted-foreground font-light">{user.username}</p>
               </div>
             </div>
-            <Button 
+            <Button
               className={`w-full rounded-xl font-bold transition-all ${isFollowing ? 'bg-secondary text-secondary-foreground' : ''}`}
               onClick={() => setIsFollowing(!isFollowing)}
               variant={isFollowing ? "secondary" : "default"}
             >
-              {isFollowing ? <><Check className="mr-2 h-4 w-4" /> Following</> : 'Follow'}
+              {isFollowing ? <><Check className="mr-2 h-4 w-4" /> Seguindo</> : 'Seguir'}
             </Button>
             <p className="text-sm leading-relaxed text-foreground/80">{user.bio}</p>
             <div className="flex items-center gap-3 text-sm text-muted-foreground pt-2">
               <Users className="h-4 w-4" />
               <span>
-                <span className="font-semibold text-foreground">{user.followers.toLocaleString()}</span> followers
+                <span className="font-semibold text-foreground">{user.followers.toLocaleString()}</span> seguidores
                 {" · "}
-                <span className="font-semibold text-foreground">{user.following.toLocaleString()}</span> following
+                <span className="font-semibold text-foreground">{user.following.toLocaleString()}</span> seguindo
               </span>
             </div>
             <div className="space-y-3 text-sm text-muted-foreground pt-4 border-t">
@@ -69,7 +70,7 @@ export function ProfilePage() {
               )}
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <span>Joined {new Date(user.joinedAt).toLocaleDateString()}</span>
+                <span>Entrou em {new Date(user.joinedAt).toLocaleDateString('pt-BR')}</span>
               </div>
             </div>
           </div>
@@ -77,15 +78,15 @@ export function ProfilePage() {
             <Tabs defaultValue="overview" className="space-y-6">
               <TabsList className="bg-transparent border-b w-full justify-start rounded-none h-auto p-0 gap-8 overflow-x-auto scrollbar-hide">
                 <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 py-3 text-sm font-medium">
-                  <BookOpen className="h-4 w-4 mr-2" /> Overview
+                  <BookOpen className="h-4 w-4 mr-2" /> Visão Geral
                 </TabsTrigger>
                 <TabsTrigger value="repositories" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 py-3 text-sm font-medium">
-                  <Package className="h-4 w-4 mr-2" /> Repositories <Badge variant="secondary" className="ml-2 px-1.5 py-0">{userRepos.length}</Badge>
+                  <Package className="h-4 w-4 mr-2" /> Repositórios <Badge variant="secondary" className="ml-2 px-1.5 py-0">{userRepos.length}</Badge>
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="overview" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <section>
-                  <h3 className="text-base font-semibold mb-4">Pinned Repositories</h3>
+                  <h3 className="text-base font-semibold mb-4">Repositórios Fixados</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {userRepos.slice(0, 4).map(repo => (
                       <Card key={repo.id} className="hover:border-primary/30 transition-all bg-card/40 hover:shadow-sm">
@@ -95,7 +96,7 @@ export function ProfilePage() {
                             <Link to={`/${user.username}/${repo.name}`} className="text-primary hover:underline">
                               {repo.name}
                             </Link>
-                            <Badge variant="outline" className="text-[10px] py-0 ml-auto font-mono">Public</Badge>
+                            <Badge variant="outline" className="text-[10px] py-0 ml-auto font-mono">Público</Badge>
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -122,7 +123,7 @@ export function ProfilePage() {
                   </div>
                 </section>
                 <section className="space-y-4">
-                  <h3 className="text-base font-semibold">Activity Heatmap</h3>
+                  <h3 className="text-base font-semibold">Mapa de Calor de Atividade</h3>
                   <div className="flex justify-center md:justify-start">
                     <ContributionGrid />
                   </div>
@@ -133,14 +134,14 @@ export function ProfilePage() {
                   <div className="relative flex-1">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
-                      placeholder="Find a repository..."
+                      placeholder="Encontre um repositório..."
                       className="pl-9 bg-muted/20 border-transparent focus:bg-background transition-all"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
-                  <Button variant="outline" size="sm" className="hidden sm:flex">Type</Button>
-                  <Button variant="outline" size="sm" className="hidden sm:flex">Language</Button>
+                  <Button variant="outline" size="sm" className="hidden sm:flex">Tipo</Button>
+                  <Button variant="outline" size="sm" className="hidden sm:flex">Linguagem</Button>
                 </div>
                 <div className="divide-y">
                   {filteredRepos.map(repo => (
@@ -149,7 +150,7 @@ export function ProfilePage() {
                         <Link to={`/${user.username}/${repo.name}`} className="text-xl font-bold text-primary hover:underline">
                           {repo.name}
                         </Link>
-                        <Badge variant="outline" className="text-[10px] py-0 capitalize border-muted-foreground/30">{repo.visibility}</Badge>
+                        <Badge variant="outline" className="text-[10px] py-0 capitalize border-muted-foreground/30">{repo.visibility === 'public' ? 'Público' : repo.visibility}</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">{repo.description}</p>
                       <div className="flex items-center gap-6 text-xs text-muted-foreground pt-2">
@@ -165,16 +166,16 @@ export function ProfilePage() {
                           <GitFork className="h-3.5 w-3.5" />
                           <span>{repo.forks}</span>
                         </div>
-                        <div className="ml-auto hidden sm:block">Updated {formatDistanceToNow(new Date(repo.updatedAt))} ago</div>
+                        <div className="ml-auto hidden sm:block">Atualizado há {formatDistanceToNow(new Date(repo.updatedAt), { locale: ptBR })}</div>
                       </div>
                     </div>
                   ))}
                   {filteredRepos.length === 0 && (
                     <div className="py-20 text-center space-y-3">
                       <Package className="h-12 w-12 text-muted-foreground/30 mx-auto" />
-                      <h3 className="text-lg font-semibold">No repositories found</h3>
-                      <p className="text-sm text-muted-foreground">Try adjusting your filters or search query.</p>
-                      <Button variant="link" onClick={() => setSearchQuery('')}>Clear filters</Button>
+                      <h3 className="text-lg font-semibold">Nenhum repositório encontrado</h3>
+                      <p className="text-sm text-muted-foreground">Tente ajustar seus filtros ou termo de pesquisa.</p>
+                      <Button variant="link" onClick={() => setSearchQuery('')}>Limpar filtros</Button>
                     </div>
                   )}
                 </div>

@@ -5,6 +5,7 @@ import { MOCK_ISSUES, MOCK_REPOSITORIES } from '@shared/mock-data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 interface IssueListProps {
   repoId?: string;
@@ -12,7 +13,7 @@ interface IssueListProps {
 export function IssueList({ repoId }: IssueListProps) {
   const { username, reponame } = useParams();
   const [filter, setFilter] = useState<'open' | 'closed'>('open');
-  const issues = repoId 
+  const issues = repoId
     ? MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === filter)
     : MOCK_ISSUES.filter(i => i.status === filter);
   const getRepoContext = (issueRepoId: string) => {
@@ -38,9 +39,9 @@ export function IssueList({ repoId }: IssueListProps) {
             )}
           >
             <CircleDot className={cn("h-4 w-4", filter === 'open' && "text-green-500")} />
-            {repoId 
-              ? MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'open').length 
-              : MOCK_ISSUES.filter(i => i.status === 'open').length} Open
+            {repoId
+              ? MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'open').length
+              : MOCK_ISSUES.filter(i => i.status === 'open').length} Abertos
           </button>
           <button
             onClick={() => setFilter('closed')}
@@ -50,21 +51,21 @@ export function IssueList({ repoId }: IssueListProps) {
             )}
           >
             <CheckCircle2 className={cn("h-4 w-4", filter === 'closed' && "text-purple-500")} />
-            {repoId 
-              ? MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'closed').length 
-              : MOCK_ISSUES.filter(i => i.status === 'closed').length} Closed
+            {repoId
+              ? MOCK_ISSUES.filter(i => i.repoId === repoId && i.status === 'closed').length
+              : MOCK_ISSUES.filter(i => i.status === 'closed').length} Fechados
           </button>
         </div>
         <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white rounded-lg gap-1.5">
-          <Plus className="h-4 w-4" /> New Issue
+          <Plus className="h-4 w-4" /> Novo Problema
         </Button>
       </div>
       <div className="border rounded-xl bg-card overflow-hidden shadow-sm">
         {issues.length === 0 ? (
           <div className="p-12 text-center space-y-3">
             <CircleDot className="h-12 w-12 text-muted-foreground/30 mx-auto" />
-            <h3 className="text-lg font-semibold">No issues found</h3>
-            <p className="text-muted-foreground">There are no {filter} issues to display.</p>
+            <h3 className="text-lg font-semibold">Nenhum problema encontrado</h3>
+            <p className="text-muted-foreground">Não há problemas {filter === 'open' ? 'abertos' : 'fechados'} para exibir.</p>
           </div>
         ) : (
           <div className="divide-y">
@@ -89,7 +90,7 @@ export function IssueList({ repoId }: IssueListProps) {
                     </div>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    #{issue.number} opened {formatDistanceToNow(new Date(issue.createdAt))} ago
+                    #{issue.number} aberto há {formatDistanceToNow(new Date(issue.createdAt), { locale: ptBR })}
                   </div>
                 </div>
                 {issue.commentsCount > 0 && (
