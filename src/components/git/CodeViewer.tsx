@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 export function CodeViewer() {
   const { username, reponame, '*': splat } = useParams();
-  const context = useOutletContext<{ repoId: string }>();
   const filePath = splat || '';
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
@@ -47,36 +46,36 @@ export function CodeViewer() {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-4"
+      className="space-y-6"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
           <Button variant="ghost" size="sm" onClick={goBack} className="-ml-2 h-8 text-muted-foreground hover:text-foreground">
             <ChevronLeft className="h-4 w-4 mr-1" /> Voltar
           </Button>
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-mono text-muted-foreground">{filePath}</span>
-            <Badge variant="secondary" className="text-[10px] px-1.5 py-0 uppercase bg-muted/50 border-none">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-sm font-mono text-muted-foreground truncate">{filePath}</span>
+            <Badge variant="secondary" className="text-[10px] px-1.5 py-0 uppercase bg-muted border-none shrink-0">
               {getLanguage(extension)}
             </Badge>
           </div>
         </div>
-        <Button variant="outline" size="sm" onClick={handleCopy} className="h-8 gap-1.5 shadow-sm">
+        <Button variant="outline" size="sm" onClick={handleCopy} className="h-8 gap-1.5 shadow-sm ml-auto sm:ml-0">
           {copied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
           {copied ? 'Copiado' : 'Copiar'}
         </Button>
       </div>
-      <div className="border rounded-xl bg-[#1e1e1e] overflow-hidden shadow-xl border-zinc-800/50">
-        <div className="bg-[#252526] border-b border-zinc-800 px-4 py-2.5 flex items-center justify-between">
+      <div className="border rounded-xl md:rounded-2xl bg-[#1e1e1e] overflow-hidden shadow-xl border-zinc-800/50">
+        <div className="bg-[#252526] border-b border-zinc-800 px-4 md:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FileCode className="h-4 w-4 text-blue-400" />
-            <span className="text-xs font-semibold text-zinc-300">{fileName}</span>
+            <span className="text-xs font-semibold text-zinc-300 truncate">{fileName}</span>
           </div>
-          <div className="text-[10px] text-zinc-500 font-mono tracking-tight">
+          <div className="hidden sm:block text-[10px] text-zinc-500 font-mono tracking-tight">
             {content.split('\n').length} linhas · {(content.length / 1024).toFixed(2)} KB
           </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto selection:bg-blue-500/30">
           <SyntaxHighlighter
             language={getLanguage(extension)}
             style={vscDarkPlus}

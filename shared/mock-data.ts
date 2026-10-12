@@ -73,15 +73,19 @@ export const MOCK_FILE_NODES: Record<string, FileNode[]> = {
     { id: 'f4', name: 'package.json', type: 'file', path: 'package.json', lastCommitMsg: 'Atualização de dependências principais do Cleudocode', lastCommitDate: subDays(new Date(), 5).toISOString(), content: '{\n  "name": "cleudocode-ai",\n  "version": "2.1.0"\n}' },
     { id: 'f5', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Atualização da identidade visual para Cleudocode', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Cleudocode AI\n\nRaciocínio avançado para tarefas complexas.\n\n## Começando\n\n```bash\nbun install cleudocode\n```\n\n## Funcionalidades\n\n- Orquestração de Tarefas\n- Contexto Multi-modal' }
   ],
+  'r2-src': [
+    { id: 'f6', name: 'engine', type: 'folder', path: 'src/engine', lastCommitMsg: 'Melhoria no manuseio de contexto', lastCommitDate: subDays(new Date(), 1).toISOString() },
+    { id: 'f7', name: 'main.ts', type: 'file', path: 'src/main.ts', lastCommitMsg: 'Inicialização do Cleudocode', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Cleudocode Inicializado");' }
+  ],
+  'r2-src-engine': [
+    { id: 'f8', name: 'core.ts', type: 'file', path: 'src/engine/core.ts', lastCommitMsg: 'Otimização do loop de inferência', lastCommitDate: subMinutes(new Date(), 30).toISOString(), content: 'export const runInference = () => {\n  console.log("Inference running...");\n};' },
+    { id: 'f9', name: 'utils.ts', type: 'file', path: 'src/engine/utils.ts', lastCommitMsg: 'Helpers de tokenização', lastCommitDate: subHours(new Date(), 5).toISOString(), content: 'export const tokenize = (text: string) => text.split(" ");' }
+  ],
   'r3': [
     { id: 'r3f1', name: 'funnels', type: 'folder', path: 'funnels', lastCommitMsg: 'Adição de algoritmo de pontuação de leads', lastCommitDate: subDays(new Date(), 3).toISOString() },
     { id: 'r3f2', name: 'scripts', type: 'folder', path: 'scripts', lastCommitMsg: 'Utilitários de migração de dados', lastCommitDate: subDays(new Date(), 1).toISOString() },
     { id: 'r3f3', name: 'main.py', type: 'file', path: 'main.py', lastCommitMsg: 'Ponto de entrada do motor de marketing', lastCommitDate: subDays(new Date(), 1).toISOString(), content: 'print("Smart Marketing v1.0")' },
     { id: 'r3f4', name: 'README.md', type: 'file', path: 'README.md', lastCommitMsg: 'Documentação para funis', lastCommitDate: subDays(new Date(), 1).toISOString(), content: '# Smart Marketing\n\nFunis movidos a IA para empresas modernas.' }
-  ],
-  'r2-src': [
-    { id: 'f6', name: 'engine', type: 'folder', path: 'src/engine', lastCommitMsg: 'Melhoria no manuseio de contexto', lastCommitDate: subDays(new Date(), 1).toISOString() },
-    { id: 'f7', name: 'main.ts', type: 'file', path: 'src/main.ts', lastCommitMsg: 'Inicialização do Cleudocode', lastCommitDate: subDays(new Date(), 4).toISOString(), content: 'console.log("Cleudocode Inicializado");' }
   ]
 };
 export const MOCK_ISSUES: Issue[] = [

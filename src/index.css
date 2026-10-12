@@ -33,19 +33,28 @@
     --muted-foreground: 240 5% 64.9%;
     --border: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --input: 240 3.7% 15.9%;
   }
 }
 @layer base {
   * {
-    @apply border-zinc-100;
+    @apply border-border;
   }
   body {
-    @apply bg-[#fafafa] text-zinc-900;
+    @apply bg-background text-foreground;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight font-bold text-zinc-900;
+    @apply tracking-tight font-bold text-foreground;
   }
 }
 @layer utilities {
@@ -57,15 +66,15 @@
     scrollbar-width: none;
   }
   .border-subtle {
-    @apply border-[0.5px] border-zinc-200/50;
+    @apply border-[0.5px] border-border/50;
   }
   .shadow-ultra-sm {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
   }
-  .text-display {
-    @apply font-bold tracking-tight text-zinc-900;
+  .dark .shadow-ultra-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   }
-  .leading-relaxed-tight {
-    line-height: 1.625;
+  .selection-custom {
+    @apply selection:bg-primary/10 selection:text-primary;
   }
 }
