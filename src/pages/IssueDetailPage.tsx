@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useOutletContext } from 'react-router-dom';
 import { CircleDot, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { MOCK_ISSUES, MOCK_COMMENTS, MOCK_USERS } from '@shared/mock-data';
 import { Badge } from '@/components/ui/badge';
@@ -8,13 +8,22 @@ import { Separator } from '@/components/ui/separator';
 import { CommentThread } from '@/components/git/CommentThread';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-export function IssueDetailPage({ repoId: propRepoId }: { repoId?: string }) {
+export function IssueDetailPage() {
   const { number, username, reponame } = useParams();
-  const repoId = propRepoId || 'r2';
+  const context = useOutletContext<{ repoId: string }>();
+  const repoId = context?.repoId || 'r1';
   const issue = MOCK_ISSUES.find(i => i.repoId === repoId && i.number === parseInt(number || '0'));
   const comments = MOCK_COMMENTS[issue?.id || ''] || [];
   const author = MOCK_USERS.find(u => u.id === issue?.authorId);
-  if (!issue) return <div className="py-20 text-center text-zinc-400 font-bold uppercase tracking-widest">Problema não encontrado</div>;
+  if (!issue) return (
+    <div className="py-32 text-center space-y-6">
+      <div className="text-zinc-100 font-bold text-7xl">404</div>
+      <div className="text-zinc-400 font-bold uppercase tracking-[0.2em] text-sm">Problema não encontrado</div>
+      <Button asChild variant="outline" className="rounded-xl">
+        <Link to={`/${username}/${reponame}/issues`}>Voltar para a Lista</Link>
+      </Button>
+    </div>
+  );
   return (
     <div className="max-w-5xl mx-auto space-y-12">
       <div className="space-y-6 pb-10 border-b border-zinc-100">
@@ -22,10 +31,10 @@ export function IssueDetailPage({ repoId: propRepoId }: { repoId?: string }) {
           <ChevronLeft className="h-4 w-4" /> Voltar
         </Link>
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 leading-tight">
             {issue.title} <span className="text-zinc-300 font-light">#{issue.number}</span>
           </h1>
-          <Button size="sm" className="bg-zinc-900 text-white rounded-xl h-10 px-6 font-bold">Novo Problema</Button>
+          <Button size="sm" className="bg-zinc-900 text-white rounded-xl h-10 px-6 font-bold hover:bg-zinc-800 transition-all">Novo Problema</Button>
         </div>
         <div className="flex items-center gap-4 flex-wrap">
           <Badge className={`rounded-xl px-4 py-1 font-bold uppercase tracking-widest text-[10px] border-0 shadow-none ${issue.status === 'open' ? "bg-green-500/10 text-green-600" : "bg-purple-500/10 text-purple-600"}`}>

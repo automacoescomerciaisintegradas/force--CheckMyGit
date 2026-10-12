@@ -57,13 +57,13 @@ const router = createBrowserRouter([
     element: <RepositoryPage />,
     errorElement: <RouteErrorBoundary />,
     children: [
-      { index: true, element: <FileBrowser repoId="" /> },
-      { path: "tree/:branch/*", element: <FileBrowser repoId="" /> },
-      { path: "blob/:branch/*", element: <CodeViewer repoId="" /> },
+      { index: true, element: <FileBrowser /> },
+      { path: "tree/:branch/*", element: <FileBrowser /> },
+      { path: "blob/:branch/*", element: <CodeViewer /> },
       { path: "issues", element: <IssueList /> },
-      { path: "issues/:number", element: <IssueDetailPage repoId="" /> },
+      { path: "issues/:number", element: <IssueDetailPage /> },
       { path: "pulls", element: <PullRequestList /> },
-      { path: "pulls/:number", element: <PullRequestDetailPage repoId="" /> },
+      { path: "pulls/:number", element: <PullRequestDetailPage /> },
     ]
   },
   {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useOutletContext } from 'react-router-dom';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { FileCode, Copy, Check, ChevronLeft } from 'lucide-react';
@@ -7,15 +7,12 @@ import { motion } from 'framer-motion';
 import { MOCK_FILE_NODES } from '@shared/mock-data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-interface CodeViewerProps {
-  repoId: string;
-}
-export function CodeViewer({ repoId }: CodeViewerProps) {
+export function CodeViewer() {
   const { username, reponame, '*': splat } = useParams();
+  const context = useOutletContext<{ repoId: string }>();
   const filePath = splat || '';
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
-  // Logic to determine language from extension
   const extension = filePath.split('.').pop()?.toLowerCase();
   const getLanguage = (ext?: string) => {
     switch(ext) {
@@ -31,7 +28,7 @@ export function CodeViewer({ repoId }: CodeViewerProps) {
   };
   const fileName = filePath.split('/').pop();
   const fileNode = Object.values(MOCK_FILE_NODES).flat().find(n => n.path === filePath);
-  const content = fileNode?.content || '// Content placeholder for demonstration.\n// In a real app, this would be fetched from storage.';
+  const content = fileNode?.content || '// Conteúdo de demonstração.\n// Em uma aplicação real, isto seria buscado do armazenamento persistente.';
   const handleCopy = () => {
     navigator.clipboard.writeText(content);
     setCopied(true);
@@ -55,7 +52,7 @@ export function CodeViewer({ repoId }: CodeViewerProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" onClick={goBack} className="-ml-2 h-8 text-muted-foreground hover:text-foreground">
-            <ChevronLeft className="h-4 w-4 mr-1" /> Back
+            <ChevronLeft className="h-4 w-4 mr-1" /> Voltar
           </Button>
           <div className="flex items-center gap-2">
             <span className="text-sm font-mono text-muted-foreground">{filePath}</span>
@@ -66,7 +63,7 @@ export function CodeViewer({ repoId }: CodeViewerProps) {
         </div>
         <Button variant="outline" size="sm" onClick={handleCopy} className="h-8 gap-1.5 shadow-sm">
           {copied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
-          {copied ? 'Copied' : 'Copy'}
+          {copied ? 'Copiado' : 'Copiar'}
         </Button>
       </div>
       <div className="border rounded-xl bg-[#1e1e1e] overflow-hidden shadow-xl border-zinc-800/50">
@@ -76,7 +73,7 @@ export function CodeViewer({ repoId }: CodeViewerProps) {
             <span className="text-xs font-semibold text-zinc-300">{fileName}</span>
           </div>
           <div className="text-[10px] text-zinc-500 font-mono tracking-tight">
-            {content.split('\n').length} lines · {(content.length / 1024).toFixed(2)} KB
+            {content.split('\n').length} linhas · {(content.length / 1024).toFixed(2)} KB
           </div>
         </div>
         <div className="overflow-x-auto">

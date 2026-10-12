@@ -1,18 +1,15 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useOutletContext } from 'react-router-dom';
 import { Folder, FileCode, ChevronRight, Clock, Book } from 'lucide-react';
 import { MOCK_FILE_NODES } from '@shared/mock-data';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MarkdownViewer } from '@/components/MarkdownViewer';
-interface FileBrowserProps {
-  repoId: string;
-}
-export function FileBrowser({ repoId: propRepoId }: FileBrowserProps) {
+export function FileBrowser() {
   const { username, reponame, '*': splat } = useParams();
-  // Se repoId não veio via props, tentamos derivar (no novo sistema de rotas context pode ser usado)
-  const repoId = propRepoId || 'r2'; // Fallback seguro para demonstração
+  const context = useOutletContext<{ repoId: string }>();
+  const repoId = context?.repoId || 'r1';
   const currentPath = splat || '';
   const pathSegments = currentPath.split('/').filter(Boolean);
   const key = currentPath === '' ? repoId : `${repoId}-${currentPath.replace(/\//g, '-')}`;
@@ -43,11 +40,11 @@ export function FileBrowser({ repoId: propRepoId }: FileBrowserProps) {
         <div className="bg-zinc-50/50 p-4 px-6 flex items-center justify-between border-b border-zinc-100">
           <div className="flex items-center gap-3">
             <Avatar className="h-6 w-6 border border-zinc-200">
-              <AvatarImage src="https://api.dicebear.com/7.x/bottts/svg?seed=cleudo" />
-              <AvatarFallback>CC</AvatarFallback>
+              <AvatarImage src={`https://github.com/${username}.png`} />
+              <AvatarFallback>{username?.[0]?.toUpperCase()}</AvatarFallback>
             </Avatar>
             <span className="text-xs font-medium text-zinc-600">
-              <strong className="text-zinc-900">automacoescomerciais</strong> atualizou o motor principal
+              <strong className="text-zinc-900">{username}</strong> atualizou o motor principal
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">

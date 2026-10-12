@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useOutletContext } from 'react-router-dom';
 import { GitPullRequest, GitMerge, CheckCircle2, Plus } from 'lucide-react';
 import { MOCK_PRS, MOCK_REPOSITORIES } from '@shared/mock-data';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
-interface PRListProps {
-  repoId?: string;
-}
-export function PullRequestList({ repoId }: PRListProps) {
+export function PullRequestList() {
   const { username, reponame } = useParams();
+  const context = useOutletContext<{ repoId?: string }>();
+  const repoId = context?.repoId;
   const [filter, setFilter] = useState<'open' | 'merged'>('open');
   const prs = repoId
     ? MOCK_PRS.filter(p => p.repoId === repoId && (filter === 'open' ? p.status === 'open' : p.status === 'merged'))
@@ -55,38 +54,37 @@ export function PullRequestList({ repoId }: PRListProps) {
               : MOCK_PRS.filter(p => p.status === 'merged').length} Mescladas
           </button>
         </div>
-        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg gap-1.5">
-          <Plus className="h-4 w-4" /> Nova Solicitação de Pull
+        <Button size="sm" className="bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl gap-1.5 px-4">
+          <Plus className="h-4 w-4" /> Nova Solicitação
         </Button>
       </div>
-      <div className="border rounded-xl bg-card overflow-hidden shadow-sm">
+      <div className="border border-zinc-100 rounded-2xl bg-white overflow-hidden shadow-none">
         {prs.length === 0 ? (
-          <div className="p-12 text-center space-y-3">
-            <GitPullRequest className="h-12 w-12 text-muted-foreground/30 mx-auto" />
-            <h3 className="text-lg font-semibold">Nenhuma solicitação encontrada</h3>
-            <p className="text-muted-foreground">Não há solicitações de pull {filter === 'open' ? 'abertas' : 'mescladas'} para exibir.</p>
+          <div className="p-20 text-center space-y-4">
+            <GitPullRequest className="h-10 w-10 text-zinc-100 mx-auto" />
+            <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Nenhuma solicitação</h3>
           </div>
         ) : (
-          <div className="divide-y">
+          <div className="divide-y divide-zinc-50">
             {prs.map((pr) => (
-              <div key={pr.id} className="p-4 hover:bg-muted/30 transition-colors flex gap-4">
+              <div key={pr.id} className="p-5 px-6 hover:bg-zinc-50/50 transition-colors flex gap-5 group">
                 {pr.status === 'merged' ? (
-                  <GitMerge className="h-5 w-5 mt-0.5 flex-shrink-0 text-purple-500" />
+                  <GitMerge className="h-4 w-4 mt-1 flex-shrink-0 text-purple-500/60" />
                 ) : (
-                  <GitPullRequest className="h-5 w-5 mt-0.5 flex-shrink-0 text-green-500" />
+                  <GitPullRequest className="h-4 w-4 mt-1 flex-shrink-0 text-green-500/60" />
                 )}
-                <div className="space-y-1 flex-1 min-w-0">
-                  <div className="flex items-start gap-2">
+                <div className="space-y-1.5 flex-1 min-w-0">
+                  <div className="flex items-start gap-2 flex-wrap">
                     <Link
                       to={getPRLink(pr)}
-                      className="font-bold text-base hover:text-primary transition-colors leading-tight"
+                      className="font-bold text-[15px] text-zinc-800 hover:text-zinc-900 transition-colors leading-tight"
                     >
-                      {!repoId && <span className="text-muted-foreground font-normal mr-1">{getRepoContext(pr.repoId)}</span>}
+                      {!repoId && <span className="text-zinc-400 font-medium mr-2">{getRepoContext(pr.repoId)}</span>}
                       {pr.title}
                     </Link>
                   </div>
-                  <div className="text-xs text-muted-foreground">
-                    #{pr.number} {pr.status === 'merged' ? 'mesclada' : 'aberta'} há {formatDistanceToNow(new Date(pr.mergedAt || pr.createdAt), { locale: ptBR })}
+                  <div className="text-[11px] font-bold text-zinc-300 uppercase tracking-tighter">
+                    #{pr.number} • {pr.status === 'merged' ? 'mesclada' : 'aberta'} há {formatDistanceToNow(new Date(pr.mergedAt || pr.createdAt), { locale: ptBR })}
                   </div>
                 </div>
               </div>
