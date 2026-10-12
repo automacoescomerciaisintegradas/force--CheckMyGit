@@ -23,66 +23,68 @@ export function IssueList() {
     return repo ? `/${repo.ownerUsername}/${repo.name}/issues/${issue.number}` : '#';
   };
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-10">
           <button
             onClick={() => setFilter('open')}
             className={cn(
-              "flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors",
-              filter === 'open' ? "text-zinc-900" : "text-zinc-400 hover:text-zinc-600"
+              "flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.2em] transition-all",
+              filter === 'open' ? "text-zinc-950" : "text-zinc-300 hover:text-zinc-400"
             )}
           >
-            <CircleDot className={cn("h-4 w-4", filter === 'open' ? "text-green-500" : "text-zinc-200")} />
+            <CircleDot className={cn("h-4 w-4", filter === 'open' ? "text-green-500/80" : "text-zinc-200")} />
             Abertos
           </button>
           <button
             onClick={() => setFilter('closed')}
             className={cn(
-              "flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors",
-              filter === 'closed' ? "text-zinc-900" : "text-zinc-400 hover:text-zinc-600"
+              "flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.2em] transition-all",
+              filter === 'closed' ? "text-zinc-950" : "text-zinc-300 hover:text-zinc-400"
             )}
           >
-            <CheckCircle2 className={cn("h-4 w-4", filter === 'closed' ? "text-purple-500" : "text-zinc-200")} />
+            <CheckCircle2 className={cn("h-4 w-4", filter === 'closed' ? "text-purple-500/80" : "text-zinc-200")} />
             Fechados
           </button>
         </div>
-        <Button size="sm" className="bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl h-9 px-4 text-xs font-bold transition-all">
-          <Plus className="h-3.5 w-3.5 mr-2" /> Novo Problema
+        <Button size="sm" className="bg-zinc-950 hover:bg-zinc-800 text-white rounded-2xl h-11 px-8 text-[12px] font-bold transition-all shadow-xl shadow-zinc-200/50">
+          <Plus className="h-4 w-4 mr-2" /> Novo Problema
         </Button>
       </div>
-      <div className="border border-zinc-100 rounded-2xl bg-white overflow-hidden">
+      <div className="border border-zinc-100 rounded-[32px] bg-white overflow-hidden shadow-ultra-sm">
         {issues.length === 0 ? (
-          <div className="p-20 text-center space-y-4">
-            <CircleDot className="h-10 w-10 text-zinc-100 mx-auto" />
-            <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Nenhum problema</h3>
+          <div className="py-32 text-center space-y-4">
+            <CircleDot className="h-12 w-12 text-zinc-50 mx-auto" />
+            <h3 className="text-[12px] font-bold text-zinc-300 uppercase tracking-[0.3em]">Nenhum problema encontrado</h3>
           </div>
         ) : (
           <div className="divide-y divide-zinc-50">
             {issues.map((issue) => (
-              <div key={issue.id} className="p-5 px-6 hover:bg-zinc-50/50 transition-colors flex gap-5 group">
-                <CircleDot className={cn("h-4 w-4 mt-1 flex-shrink-0", issue.status === 'open' ? "text-green-500/60" : "text-purple-500/60")} />
-                <div className="space-y-1.5 flex-1 min-w-0">
-                  <div className="flex items-start gap-3 flex-wrap">
+              <div key={issue.id} className="p-8 px-10 hover:bg-zinc-50/30 transition-all flex gap-8 group">
+                <CircleDot className={cn("h-4.5 w-4.5 mt-1.5 flex-shrink-0", issue.status === 'open' ? "text-green-500/30" : "text-purple-500/30")} />
+                <div className="space-y-2.5 flex-1 min-w-0">
+                  <div className="flex items-center gap-4 flex-wrap">
                     <Link
                       to={getIssueLink(issue)}
-                      className="font-bold text-[15px] text-zinc-800 hover:text-zinc-900 leading-tight"
+                      className="font-bold text-[17px] text-zinc-900 hover:text-zinc-600 transition-colors tracking-tight"
                     >
                       {issue.title}
                     </Link>
                     {issue.labels.map(label => (
-                      <Badge key={label} variant="outline" className="text-[9px] font-bold uppercase tracking-widest border-zinc-100 bg-zinc-50/50 text-zinc-400">
+                      <Badge key={label} variant="outline" className="text-[9px] font-bold uppercase tracking-widest border-zinc-100 bg-zinc-50/50 text-zinc-400 py-0.5 px-2">
                         {label}
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-[11px] font-bold text-zinc-300 uppercase tracking-tighter">
-                    #{issue.number} • há {formatDistanceToNow(new Date(issue.createdAt), { locale: ptBR })}
+                  <div className="text-[11px] font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-3">
+                    <span className="text-zinc-950 opacity-80">#{issue.number}</span>
+                    <span className="w-1 h-1 rounded-full bg-zinc-100" />
+                    <span>há {formatDistanceToNow(new Date(issue.createdAt), { locale: ptBR })}</span>
                   </div>
                 </div>
                 {issue.commentsCount > 0 && (
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-300 group-hover:text-zinc-900 transition-colors">
-                    <MessageSquare className="h-3.5 w-3.5" />
+                  <div className="flex items-center gap-2 text-[11px] font-bold text-zinc-300 group-hover:text-zinc-950 transition-colors">
+                    <MessageSquare className="h-4 w-4" />
                     <span>{issue.commentsCount}</span>
                   </div>
                 )}

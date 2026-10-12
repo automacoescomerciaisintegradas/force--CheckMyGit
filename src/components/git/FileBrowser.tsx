@@ -16,9 +16,9 @@ export function FileBrowser() {
   const nodes = MOCK_FILE_NODES[key] || [];
   const readmeFile = nodes.find(n => n.name.toLowerCase() === 'readme.md' && n.type === 'file');
   return (
-    <div className="space-y-10">
-      <nav className="flex items-center space-x-2 text-[13px] font-medium text-zinc-400">
-        <Link to={`/${username}/${reponame}`} className="hover:text-zinc-900 transition-colors">
+    <div className="space-y-12">
+      <nav className="flex items-center space-x-2 text-[12px] font-bold uppercase tracking-[0.1em] text-zinc-300">
+        <Link to={`/${username}/${reponame}`} className="hover:text-zinc-950 transition-colors">
           {reponame}
         </Link>
         {pathSegments.map((segment, idx) => {
@@ -28,7 +28,7 @@ export function FileBrowser() {
               <ChevronRight className="h-3.5 w-3.5 text-zinc-200" />
               <Link
                 to={`/${username}/${reponame}/tree/main/${path}`}
-                className={idx === pathSegments.length - 1 ? "text-zinc-900 font-bold" : "hover:text-zinc-900 transition-colors"}
+                className={idx === pathSegments.length - 1 ? "text-zinc-950" : "hover:text-zinc-950 transition-colors"}
               >
                 {segment}
               </Link>
@@ -36,56 +36,56 @@ export function FileBrowser() {
           );
         })}
       </nav>
-      <div className="border border-zinc-100 rounded-2xl bg-white overflow-hidden">
-        <div className="bg-zinc-50/50 p-4 px-6 flex items-center justify-between border-b border-zinc-100">
+      <div className="border border-zinc-100 rounded-3xl bg-white overflow-hidden shadow-ultra-sm">
+        <div className="bg-zinc-50/40 p-4 px-8 flex items-center justify-between border-b border-zinc-50">
           <div className="flex items-center gap-3">
-            <Avatar className="h-6 w-6 border border-zinc-200">
+            <Avatar className="h-6 w-6 border border-zinc-200 shadow-ultra-sm">
               <AvatarImage src={`https://github.com/${username}.png`} />
               <AvatarFallback>{username?.[0]?.toUpperCase()}</AvatarFallback>
             </Avatar>
-            <span className="text-xs font-medium text-zinc-600">
-              <strong className="text-zinc-900">{username}</strong> atualizou o motor principal
+            <span className="text-[12px] font-medium text-zinc-400">
+              <strong className="text-zinc-900 font-bold">@{username}</strong> atualizou o motor principal
             </span>
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-300 uppercase tracking-widest">
             <Clock className="h-3 w-3" /> há 1 dia
           </div>
         </div>
-        <div className="divide-y divide-zinc-50">
+        <div className="divide-y divide-zinc-50/50">
           {nodes.length > 0 ? nodes.map((node) => (
-            <div key={node.id} className="flex items-center justify-between p-4 px-6 hover:bg-zinc-50/50 transition-colors group">
-              <div className="flex items-center gap-4 flex-1 min-w-0">
+            <div key={node.id} className="flex items-center justify-between py-3.5 px-8 hover:bg-zinc-50/30 transition-colors group">
+              <div className="flex items-center gap-5 flex-1 min-w-0">
                 {node.type === 'folder' ? (
-                  <Folder className="h-4 w-4 text-zinc-400" />
+                  <Folder className="h-4 w-4 text-zinc-300 fill-zinc-50" />
                 ) : (
-                  <FileCode className="h-4 w-4 text-zinc-300" />
+                  <FileCode className="h-4 w-4 text-zinc-200" />
                 )}
                 <Link
                   to={`/${username}/${reponame}/${node.type === 'folder' ? 'tree' : 'blob'}/main/${node.path}`}
-                  className="text-[13px] font-medium text-zinc-700 group-hover:text-zinc-900 truncate"
+                  className="text-[14px] font-medium text-zinc-700 group-hover:text-zinc-950 truncate transition-colors"
                 >
                   {node.name}
                 </Link>
               </div>
-              <div className="flex items-center gap-12 text-[11px] font-medium text-zinc-400">
-                <span className="hidden md:inline max-w-[240px] truncate text-zinc-300">{node.lastCommitMsg}</span>
-                <span className="w-24 text-right uppercase tracking-tighter">há {formatDistanceToNow(new Date(node.lastCommitDate), { locale: ptBR })}</span>
+              <div className="flex items-center gap-14 text-[11px] font-medium">
+                <span className="hidden md:inline max-w-[300px] truncate text-zinc-300 font-normal">{node.lastCommitMsg}</span>
+                <span className="w-24 text-right uppercase tracking-tighter text-zinc-300 font-bold">há {formatDistanceToNow(new Date(node.lastCommitDate), { locale: ptBR })}</span>
               </div>
             </div>
           )) : (
-            <div className="p-16 text-center text-sm text-zinc-300 font-medium italic">
+            <div className="p-20 text-center text-[13px] text-zinc-300 font-medium italic">
               Diretório vazio.
             </div>
           )}
         </div>
       </div>
       {readmeFile && (
-        <div className="border border-zinc-100 rounded-2xl bg-white">
-          <div className="bg-zinc-50/50 px-6 py-4 border-b border-zinc-100 flex items-center gap-2.5">
-            <Book className="h-4 w-4 text-zinc-400" />
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-500">{readmeFile.name}</span>
+        <div className="border border-zinc-100 rounded-[32px] bg-white shadow-ultra-sm overflow-hidden">
+          <div className="bg-zinc-50/40 px-8 py-5 border-b border-zinc-50 flex items-center gap-3">
+            <Book className="h-4 w-4 text-zinc-300" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">{readmeFile.name}</span>
           </div>
-          <div className="p-10 lg:p-16">
+          <div className="p-12 lg:p-24">
             <MarkdownViewer content={readmeFile.content || "# README\nConteúdo indisponível."} />
           </div>
         </div>
